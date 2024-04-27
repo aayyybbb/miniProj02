@@ -1,0 +1,153 @@
+//user 테이블 생성:
+
+CREATE TABLE `user` (
+	`user_id` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`pwd` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`name` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`birth` DATE NOT NULL,
+	`gender` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`phone` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`addr` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`role` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`locked_at` DATETIME NULL DEFAULT NULL,
+	`created_at` DATETIME NOT NULL DEFAULT current_timestamp(),
+	PRIMARY KEY (`user_id`) USING BTREE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
+//user 테이블 샘플 데이터:
+
+INSERT INTO `user` (`user_id`, `pwd`, `name`, `birth`, `gender`, `phone`, `addr`, `role`, `locked_at`) VALUES
+('user', 'password1', 'User One', '1990-01-01', 'Male', '123-456-7890', 'Address 1', 'USER', NULL),
+('user2', 'password2', 'User Two', '1991-02-02', 'Female', '234-567-8901', 'Address 2', 'USER', NULL),
+('user3', 'password3', 'User Three', '1992-03-03', 'Male', '345-678-9012', 'Address 3', 'USER', NULL),
+('user4', 'password4', 'User Four', '1993-04-04', 'Female', '456-789-0123', 'Address 4', 'USER', NULL),
+('user5', 'password5', 'User Five', '1994-05-05', 'Male', '567-890-1234', 'Address 5', 'USER', NULL),
+('admin1', 'adminpassword1', 'Admin One', '1980-01-01', 'Male', '111-222-3333', 'Admin Address 1', 'ADMIN', NULL),
+('admin2', 'adminpassword2', 'Admin Two', '1981-02-02', 'Female', '222-333-4444', 'Admin Address 2', 'ADMIN', NULL),
+('admin3', 'adminpassword3', 'Admin Three', '1982-03-03', 'Male', '333-444-5555', 'Admin Address 3', 'ADMIN', NULL),
+('admin4', 'adminpassword4', 'Admin Four', '1983-04-04', 'Female', '444-555-6666', 'Admin Address 4', 'ADMIN', NULL),
+('admin5', 'adminpassword5', 'Admin Five', '1984-05-05', 'Male', '555-666-7777', 'Admin Address 5', 'ADMIN', NULL);
+
+//hobby 테이블 생성:
+
+CREATE TABLE `hobby` (
+	`hobby_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`hobby_name` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	PRIMARY KEY (`hobby_id`) USING BTREE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=11
+;
+
+
+//hobby 테이블 샘플 데이터:
+
+INSERT INTO `hobby` (`hobby_name`) VALUES
+('Reading'),
+('Gardening'),
+('Cooking'),
+('Painting'),
+('Photography'),
+('Playing Musical Instruments'),
+('Hiking'),
+('Traveling'),
+('Sports'),
+('Drawing');
+
+//user_hobby 테이블 생성:
+
+CREATE TABLE `user_hobby` (
+	`user_id` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`hobby_id` INT(11) NOT NULL,
+	INDEX `fk_user_user_hobby_hobby_id` (`hobby_id`) USING BTREE,
+	INDEX `fk_user_user_hobby_user_id` (`user_id`) USING BTREE,
+	CONSTRAINT `fk_user_user_hobby_hobby_id` FOREIGN KEY (`hobby_id`) REFERENCES `hobby` (`hobby_id`) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `fk_user_user_hobby_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
+// 테이블 샘플 데이터:
+
+INSERT INTO `user_hobby` (`user_id`, `hobby_id`) VALUES
+('user', 1), -- User One likes Reading
+('user', 3), -- User One likes Cooking
+('user2', 2), -- User Two likes Gardening
+('user2', 5), -- User Two likes Photography
+('user3', 4), -- User Three likes Painting
+('user4', 6), -- User Four likes Playing Musical Instruments
+('user4', 7), -- User Four likes Hiking
+('user5', 8), -- User Five likes Traveling
+('user5', 9), -- User Five likes Sports
+('admin1', 1), -- Admin One likes Reading
+('admin2', 3), -- Admin Two likes Cooking
+('admin2', 5), -- Admin Two likes Photography
+('admin3', 4), -- Admin Three likes Painting
+('admin4', 6), -- Admin Four likes Playing Musical Instruments
+('admin5', 8), -- Admin Five likes Traveling
+('admin5', 9); -- Admin Five likes Sports
+
+//board 테이블 생성:
+
+CREATE TABLE `board` (
+	`board_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`user_id` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`title` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`content` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`created_at` DATETIME NULL DEFAULT current_timestamp(),
+	`viewcount` INT(11) NOT NULL DEFAULT '0',
+	`pwd` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	PRIMARY KEY (`board_id`) USING BTREE,
+	INDEX `fk_user_board_user_id` (`user_id`) USING BTREE,
+	CONSTRAINT `fk_user_board_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE ON DELETE CASCADE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=21
+;
+
+
+//board 테이블 샘플 데이터:
+
+INSERT INTO `board` (`user_id`, `title`, `content`, `viewcount`, `pwd`) VALUES
+('user', 'Title 1', 'Content 1', 0, NULL),
+('user2', 'Title 2', 'Content 2', 0, NULL),
+('user3', 'Title 3', 'Content 3', 0, NULL),
+('user4', 'Title 4', 'Content 4', 0, NULL),
+('user5', 'Title 5', 'Content 5', 30, NULL),
+('user', 'Title 6', 'Content 6', 35, NULL),
+('user2', 'Title 7', 'Content 7', 40, NULL),
+('user3', 'Title 8', 'Content 8', 45, NULL),
+('user4', 'Title 9', 'Content 9', 50, NULL),
+('user5', 'Title 10', 'Content 10', 55, NULL),
+('admin1', 'Title 11', 'Content 11', 60, NULL),
+('admin2', 'Title 12', 'Content 12', 65, NULL),
+('admin3', 'Title 13', 'Content 13', 70, NULL),
+('admin4', 'Title 14', 'Content 14', 75, NULL),
+('admin5', 'Title 15', 'Content 15', 80, NULL),
+('admin1', 'Title 16', 'Content 16', 85, NULL),
+('admin2', 'Title 17', 'Content 17', 90, NULL),
+('admin3', 'Title 18', 'Content 18', 95, NULL),
+('admin4', 'Title 19', 'Content 19', 100, NULL),
+('admin5', 'Title 20', 'Content 20', 105, NULL);
+
+// file 테이블 생성:
+
+CREATE TABLE `file` (
+	`file_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`board_id` INT(11) NOT NULL,
+	`file_save_name` UUID NOT NULL DEFAULT uuid(),
+	`file_origin_name` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`file_source` VARCHAR(50) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_general_ci',
+	PRIMARY KEY (`file_id`) USING BTREE,
+	INDEX `fk_board_file_board_id` (`board_id`) USING BTREE,
+	CONSTRAINT `fk_board_file_board_id` FOREIGN KEY (`board_id`) REFERENCES `board` (`board_id`) ON UPDATE CASCADE ON DELETE NO ACTION
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
