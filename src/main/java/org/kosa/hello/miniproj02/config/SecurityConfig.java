@@ -41,9 +41,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-//		    http.csrf().disable() // CSRF 보호 비활성화
+//		    http.csrf().disable() // CSRF
 //		        .authorizeRequests()
-//		        .anyRequest().permitAll(); // 모든 요청에 대해 접근 허용
+//		        .anyRequest().permitAll(); //
 
 		http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 

@@ -19,7 +19,6 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
 	@Autowired
 	private LoginMapper loginMapper;
-	private final String LOGIN_ATTEMPT_SESSION_KEY = "loginAttempt";
 
 	@Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication //로그인한 사용자 정보가 있는 객체
@@ -28,7 +27,7 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 //		//로그인 한 마지막 시간 수정
 //		memberMapper.updateMemberLastLogin(authentication.getName());
 //		//로그인 실패시 카운트를 초기화 한다
-//		memberMapper.loginCountClear(authentication.getName());
+		loginMapper.unLock(authentication.getName());
 
 		System.out.println("authentication ->" + authentication);
 

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,9 +20,11 @@ public class UserVO {
     private String phone;
     private String addr;
     private String role;
+    private int loginCount;
 
-    private String locked_at;
-    private String created_at;
+    private LocalDateTime locked_at;
+    private LocalDateTime created_at;
+    private LocalDateTime last_login;
 
     public UserVO(String userId) {
         this.userId = userId;
