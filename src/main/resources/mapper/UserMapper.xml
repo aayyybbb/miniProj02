@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.kosa.hello.miniproj02.user.mapper.UserMapper">
+
+	<insert id="userInsert" parameterType="org.kosa.hello.miniproj02.entity.UserVO">
+		insert into user
+		(user_Id, pwd, name, birth, gender, phone, addr, role)
+		values
+		(#{userId}, #{pwd}, #{name}, #{birth}, #{gender}, #{phone}, #{addr}, #{role})
+	</insert>
+
+</mapper>
