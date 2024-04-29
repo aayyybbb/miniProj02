@@ -1,25 +1,34 @@
 package org.kosa.hello.miniproj02.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.kosa.hello.miniproj02.scheduler.Scheduler;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Arrays;
 
+@Data
+@AllArgsConstructor
+@Builder
 public class LoginDetails implements UserDetails {
+    private Scheduler scheduler;
 
     private UserVO userVO;
 
-    public LoginDetails(UserVO userVO) {
-        this.userVO = userVO;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(()-> userVO.getRole());
-        return authorities;
+        Collection<GrantedAuthority> collections = new ArrayList<>();
+
+        Arrays.stream(userVO.getRole().split(",")).forEach(role -> collections.add(new SimpleGrantedAuthority("ROLE_" + role.trim())));
+
+        return collections;
     }
 
     @Override
@@ -29,7 +38,7 @@ public class LoginDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userVO.getUserId();
+        return userVO.getUser_id();
     }
 
     @Override
@@ -39,7 +48,14 @@ public class LoginDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return !(userVO.getLoginCount() >= 3);
+        if(userVO.getLogin_count() == 3){
+            scheduler.unLockUser(LocalDateTime.now(), userVO.getUser_id());
+            System.err.println("잠금해제 스케줄 등록 :" + userVO.getUser_id());
+            return false;
+        }else{
+            return true;
+        }
+
     }
 
     @Override

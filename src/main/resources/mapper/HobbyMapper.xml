@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.kosa.hello.miniproj02.hobby.mapper.HobbyMapper">
+
+    <select id="hobbyVOList" resultType="org.kosa.hello.miniproj02.entity.HobbyVO">
+        select
+            *
+        from hobby
+    </select>
+
+    <insert id="hobbyInsert" parameterType="map" >
+        INSERT INTO user_hobby(
+              user_id
+            , hobby_id
+        ) VALUES
+        <foreach collection="hobby" item="hobby" separator=",">
+        (
+              #{user_id}
+            , #{hobby}
+        )
+        </foreach>
+    </insert>
+</mapper>

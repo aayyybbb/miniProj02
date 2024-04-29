@@ -18,15 +18,17 @@ import java.time.LocalDateTime;
 @Slf4j
 @RequiredArgsConstructor
 public class LoginService implements UserDetailsService {
+
     private final LoginMapper loginMapper;
     private final Scheduler scheduler;
+
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        UserVO resultVO = loginMapper.login(new UserVO(userId));
         loginMapper.plusCount(userId);
-        scheduler.unLockUser(LocalDateTime.now(),userId);
-        if (resultVO == null) {
-      			throw new UsernameNotFoundException(userId + " 사용자가 존재하지 않습니다");
-      		}
-        return new LoginDetails(loginMapper.login(new UserVO(userId)));
+        UserVO userVO = loginMapper.login(new UserVO(userId));
+        LoginDetails resultVO = new LoginDetails(scheduler,userVO);
+        if (userVO == null) {
+            throw new UsernameNotFoundException(userId + " 사용자가 존재하지 않습니다");
+        }
+        return resultVO;
     }
 }

@@ -6,9 +6,16 @@
 
 	<insert id="userInsert" parameterType="org.kosa.hello.miniproj02.entity.UserVO">
 		insert into user
-		(user_Id, pwd, name, birth, gender, phone, addr, role)
+		(user_id, pwd, name, birth, gender, phone, addr, role)
 		values
-		(#{userId}, #{pwd}, #{name}, #{birth}, #{gender}, #{phone}, #{addr}, #{role})
+		(#{user_id}, #{pwd}, #{name}, #{birth}, #{gender}, #{phone}, #{addr}, #{role})
 	</insert>
+
+	<select id="userVOList" resultType="org.kosa.hello.miniproj02.entity.UserVO">
+		select
+		    *
+		from
+		    user
+	</select>
 
 </mapper>

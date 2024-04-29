@@ -7,6 +7,8 @@ import org.kosa.hello.miniproj02.user.mapper.UserMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -20,5 +22,9 @@ public class UserService {
         userVO.setPwd(encodedPwd);
         userVO.setRole("USER");
         return userMapper.userInsert(userVO);
+    }
+
+    public List<UserVO> getUserList(){
+        return userMapper.userVOList();
     }
 }

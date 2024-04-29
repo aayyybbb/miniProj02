@@ -37,13 +37,13 @@ public class Scheduler {
      */
     public void unLockUser(LocalDateTime requestTime, String userId) {
         UserVO userVO = loginMapper.login(new UserVO(userId));
-        if(userVO.getLoginCount() >= 3){
+        if(userVO.getLogin_count() >= 3){
             LocalDateTime now = LocalDateTime.now();
             long delay = Duration.between(now, requestTime.plusMinutes(20)).toMillis();
             Runnable run = () -> {
                    loginMapper.unLock(userId);
                    System.out.println("Task executed 20 minutes after request!");
                };
-            scheduledExecutor.scheduledExecutorService().schedule(run, delay, TimeUnit.MILLISECONDS);
+            scheduledExecutor.scheduledExecutorService().schedule(run, 5, TimeUnit.SECONDS);
         }}
 }

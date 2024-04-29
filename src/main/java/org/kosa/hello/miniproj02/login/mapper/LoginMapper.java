@@ -7,7 +7,7 @@ import org.kosa.hello.miniproj02.entity.UserVO;
 public interface LoginMapper {
     UserVO login(UserVO userVO);
 
-    void unLock(String userId);
+    int unLock(String userId);
 
     void plusCount(String userId);
 

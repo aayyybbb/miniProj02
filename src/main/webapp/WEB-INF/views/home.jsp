@@ -31,6 +31,9 @@
 			<li class="nav-item"><a class="nav-link" href="/user/updateForm">회원정보</a></li>
 			<li class="nav-item"><a class="nav-link" href="/login/logout">로그아웃</a></li>
 			<li class="nav-item"><a class="nav-link" href="/board/list">게시물 목록</a></li>
+			<c:if test="${principal.authorities.contains('ADMIN')}">
+				<li class="nav-item"><a class="nav-link" href="/admin/list">관리자 메뉴</a></li>
+			</c:if>
 		</ul>
 	</c:otherwise>
 </c:choose>

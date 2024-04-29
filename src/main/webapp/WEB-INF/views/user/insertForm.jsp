@@ -11,7 +11,7 @@
 회원가입 페이지
 
 <form id="rForm" method="post">
-    <label>아이디:</label> <input type="text" id="userId" name="userId" required="required"><br>
+    <label>아이디:</label> <input type="text" id="user_id" name="user_id" required="required"><br>
     <label>비밀번호:</label> <input type="password" id="pwd" name="pwd" required="required"><br>
     <label>이름:</label> <input type="text" id="name" name="name" required="required"><br>
     <label>주소:</label> <input type="text" id="addr" name="addr" required="required"><br>
@@ -20,11 +20,11 @@
     <label>성별:</label>
     <input type="radio" id="male" name="gender" value="male"> <label for="male">남성</label>
     <input type="radio" id="female" name="gender" value="female"> <label for="female">여성</label><br>
-<%--<label>취미:</label><br>--%>
-<%--<c:forEach var="hobby" items="${hobby}">--%>
-<%--    <input type="checkbox" id="${hobby.hobbyId}" name="hobby" value="${hobby.hobbyId}">--%>
-<%--    <label for="${hobby.hobbyId}">${hobby.hobby}</label><br>--%>
-<%--</c:forEach>--%>
+    <label>취미:</label><br>
+    <c:forEach var="hobby" items="${hobby}">
+        <input type="checkbox" id="${hobby.hobby_id}" name="hobby" value="${hobby.hobby_id}">
+        <label for="${hobby.hobby_name}">${hobby.hobby_name}</label><br>
+    </c:forEach>
     <div>
       <input type="submit" value="등록">
     </div>
