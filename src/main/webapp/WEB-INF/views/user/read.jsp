@@ -1,16 +1,45 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: y00nb
-  Date: 2024-04-27
-  Time: 오후 3:33
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Title</title>
+<meta charset="UTF-8">
+<title>Insert title here</title>
 </head>
 <body>
+마이 페이지
 
+<label>아이디 : ${user.user_id}</label> <br/>
+<label>이름: ${user.name}</label><br/>
+<label>주소: ${user.addr}</label><br/>
+<label>연락처: ${user.phone}</label><br/>
+<label>생일: ${user.birth}</label>
+<label>성별: ${user.gender}</label><br/>
+취미:
+<c:forEach var="hobby" items="${hobbyList}">
+    <label for="${hobby.hobby_name}">${hobby.hobby_name}</label><br>
+</c:forEach>
+
+<script type="text/javascript" src="<c:url value='/js/common.js'/>"></script>
+<script type="text/javascript">
+    const rForm = document.getElementById("rForm");
+    rForm.addEventListener("submit", e => {
+    	//서버에 form data를 전송하지 않는다
+    	e.preventDefault();
+
+		ybFetch("/user/insert", "rForm", json => {
+			switch(json.status) {
+			case 0:
+				//성공
+				alert("게시물을 등록 하였습니다");
+				location="/";
+				break;
+			default:
+				alert(json.statusMessage);
+			}
+		});
+    });
+</script>
 </body>
 </html>

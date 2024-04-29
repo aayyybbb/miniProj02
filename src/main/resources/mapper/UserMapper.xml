@@ -18,4 +18,13 @@
 		    user
 	</select>
 
+	<select id="userInfo" resultType="org.kosa.hello.miniproj02.entity.UserVO">
+		select
+		    *
+		from
+		    user
+		where
+		    user_id = #{user_id}
+	</select>
+
 </mapper>

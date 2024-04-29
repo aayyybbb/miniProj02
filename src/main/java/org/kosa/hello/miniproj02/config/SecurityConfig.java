@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.formLogin()
 			.usernameParameter("user_id")
 			.passwordParameter("pwd")
-			.loginPage("/loginForm")
+			.loginPage("/login/loginForm")
 			.loginProcessingUrl("/login")
 			.defaultSuccessUrl("/")
 			.successHandler(authSuccessHandler)

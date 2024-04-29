@@ -2,6 +2,7 @@ package org.kosa.hello.miniproj02.hobby.service;
 
 import lombok.RequiredArgsConstructor;
 import org.kosa.hello.miniproj02.entity.HobbyVO;
+import org.kosa.hello.miniproj02.entity.UserVO;
 import org.kosa.hello.miniproj02.hobby.mapper.HobbyMapper;
 import org.springframework.stereotype.Service;
 
@@ -18,5 +19,9 @@ public class HobbyService {
 
     public int hobbyInsert(String userId, List<String> hobby) {
         return hobbyMapper.hobbyInsert(userId,hobby);
+    }
+
+    public List<HobbyVO> getHobbyInfo(UserVO userVO){
+        return hobbyMapper.hobbyInfo(userVO);
     }
 }

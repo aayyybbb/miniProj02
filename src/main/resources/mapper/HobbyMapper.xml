@@ -22,4 +22,16 @@
         )
         </foreach>
     </insert>
+
+    <select id="hobbyInfo" resultType="org.kosa.hello.miniproj02.entity.HobbyVO">
+        select
+            h.hobby_id, h.hobby_name
+        from
+            hobby h
+        join
+            user_hobby uh
+        on h.hobby_id = uh.hobby_id
+        where
+            uh.user_id = #{user_id}
+    </select>
 </mapper>

@@ -11,4 +11,6 @@ public interface UserMapper {
     int userInsert(UserVO userVO);
 
     List<UserVO> userVOList();
+
+    UserVO userInfo(UserVO userVO);
 }

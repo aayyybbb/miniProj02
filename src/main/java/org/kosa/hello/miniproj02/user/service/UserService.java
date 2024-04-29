@@ -27,4 +27,8 @@ public class UserService {
     public List<UserVO> getUserList(){
         return userMapper.userVOList();
     }
+
+    public UserVO getUserInfo(String userId){
+        return userMapper.userInfo(new UserVO(userId));
+    }
 }

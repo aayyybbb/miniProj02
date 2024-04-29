@@ -12,16 +12,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
 @AllArgsConstructor
+@RequestMapping("/admin")
 public class AdminController {
     private final UserService userService;
 
     @GetMapping("/list")
-    @ResponseBody
     public String list(Model model){
         List<UserVO> userList = userService.getUserList();
         model.addAttribute("userList", userList);
-        return "list";
+        return "/admin/list";
     }
 }

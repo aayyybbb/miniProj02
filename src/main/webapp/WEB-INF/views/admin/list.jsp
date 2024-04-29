@@ -57,10 +57,10 @@
         </tr>
         <c:forEach var="user" items="${userList}">
         <tr>
-            <td>${member.id}</td>
-            <td><a href="/read${member.id}">${member.name}</a></td>
-            <td>${member.phone}</td>
-            <td>${member.gender}</td>
+            <td>${user.user_id}</td>
+            <td><a href="/read${user.user_id}">${user.name}</a></td>
+            <td>${user.phone}</td>
+            <td>${user.gender}</td>
         </tr>
         </c:forEach>
     </table>

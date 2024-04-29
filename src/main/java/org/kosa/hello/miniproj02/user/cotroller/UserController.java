@@ -5,12 +5,14 @@ import org.kosa.hello.miniproj02.entity.HobbyVO;
 import org.kosa.hello.miniproj02.entity.UserVO;
 import org.kosa.hello.miniproj02.hobby.service.HobbyService;
 import org.kosa.hello.miniproj02.user.service.UserService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,5 +47,15 @@ public class UserController {
         }
 
         return map;
+    }
+
+    @Transactional
+    @GetMapping("/myPage")
+    public String myPage(Model model, Principal principal) {
+        UserVO userVO = userService.getUserInfo(principal.getName());
+        List<HobbyVO> hobbyList = hobbyService.getHobbyInfo(userVO);
+        model.addAttribute("hobbyList", hobbyList);
+        model.addAttribute("user", userVO);
+        return "/user/read";
     }
 }
