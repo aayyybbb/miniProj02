@@ -8,7 +8,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-마이 페이지
+<h1>
+   회원 상세 페이지
+</h1>
 
 <label>아이디 : ${user.user_id}</label> <br/>
 <label>이름: ${user.name}</label><br/>
@@ -18,8 +20,11 @@
 <label>성별: ${user.gender}</label><br/>
 취미:
 <c:forEach var="hobby" items="${hobbyList}">
-    <label for="${hobby.hobby_name}">${hobby.hobby_name}</label><br>
+    <label for="${hobby.hobby_name}">${hobby.hobby_name}</label><br/>
 </c:forEach>
+
+<a href="/user/updateForm">수정</a><br/>
+<a href="/">취소</a>
 
 <script type="text/javascript" src="<c:url value='/js/common.js'/>"></script>
 <script type="text/javascript">
@@ -32,7 +37,7 @@
 			switch(json.status) {
 			case 0:
 				//성공
-				alert("게시물을 등록 하였습니다");
+				alert("회원가입을 완료 하였습니다");
 				location="/";
 				break;
 			default:

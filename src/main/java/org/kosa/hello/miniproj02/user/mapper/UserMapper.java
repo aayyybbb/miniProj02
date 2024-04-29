@@ -10,7 +10,11 @@ import java.util.List;
 public interface UserMapper {
     int userInsert(UserVO userVO);
 
+    int userUpdate(UserVO userVO);
+
     List<UserVO> userVOList();
 
     UserVO userInfo(UserVO userVO);
+
+
 }

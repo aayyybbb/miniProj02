@@ -27,4 +27,18 @@
 		    user_id = #{user_id}
 	</select>
 
+	<update id="userUpdate" parameterType="org.kosa.hello.miniproj02.entity.UserVO">
+		update
+		user
+		set
+		    pwd = #{pwd},
+		    name = #{name},
+		    addr = #{addr},
+		    birth = #{birth},
+		    phone = #{phone},
+		    gender = #{gender}
+		where
+		    user_id = #{user_id}
+	</update>
+
 </mapper>

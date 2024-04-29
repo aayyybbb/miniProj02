@@ -14,4 +14,6 @@ public interface HobbyMapper {
     int hobbyInsert(@Param("user_id")String userId, @Param("hobby") List<String> hobby);
 
     List<HobbyVO> hobbyInfo(UserVO userVO);
+
+    int hobbyDelete(@Param("user_id") String userId);
 }

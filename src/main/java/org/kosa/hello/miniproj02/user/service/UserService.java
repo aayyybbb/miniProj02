@@ -6,6 +6,7 @@ import org.kosa.hello.miniproj02.entity.UserVO;
 import org.kosa.hello.miniproj02.user.mapper.UserMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final BCryptPasswordEncoder passwordEncoder;
 
+    @Transactional
     public int userInsert(UserVO userVO) {
         String encodedPwd = passwordEncoder.encode(userVO.getPwd());
         userVO.setPwd(encodedPwd);
@@ -28,7 +30,15 @@ public class UserService {
         return userMapper.userVOList();
     }
 
+    @Transactional
     public UserVO getUserInfo(String userId){
         return userMapper.userInfo(new UserVO(userId));
+    }
+
+    @Transactional
+    public int userUpdate(UserVO userVO) {
+        String newPwd = passwordEncoder.encode(userVO.getPwd());
+        userVO.setPwd(newPwd);
+        return userMapper.userUpdate(userVO);
     }
 }

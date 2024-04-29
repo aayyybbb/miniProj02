@@ -34,4 +34,12 @@
         where
             uh.user_id = #{user_id}
     </select>
+
+    <delete id="hobbyDelete">
+        delete
+        from
+            user_hobby
+        where
+            user_id = #{user_id}
+    </delete>
 </mapper>

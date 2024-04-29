@@ -33,9 +33,8 @@ public class UserController {
 
 
     @ResponseBody
-    @Transactional
     @PostMapping("/insert")
-    public Map<String, Object> insert(@RequestBody UserVO userVO,HttpServletRequest request) {
+    public Map<String, Object> insert(@RequestBody UserVO userVO) {
         int userUpdated = userService.userInsert(userVO);
         int hobbyUpdated = hobbyService.hobbyInsert(userVO.getUser_id(),userVO.getHobby());
         Map<String, Object> map = new HashMap<>();
@@ -49,7 +48,6 @@ public class UserController {
         return map;
     }
 
-    @Transactional
     @GetMapping("/myPage")
     public String myPage(Model model, Principal principal) {
         UserVO userVO = userService.getUserInfo(principal.getName());
@@ -57,5 +55,34 @@ public class UserController {
         model.addAttribute("hobbyList", hobbyList);
         model.addAttribute("user", userVO);
         return "/user/read";
+    }
+
+    @GetMapping("/updateForm")
+    public String updateForm(Model model, Principal principal) {
+
+        UserVO userVO = userService.getUserInfo(principal.getName());
+        List<HobbyVO> hobbyList = hobbyService.getHobbyInfo(userVO);
+        List<HobbyVO> hobbyVOList = hobbyService.getHobbyList();
+
+        model.addAttribute("hobby", hobbyVOList);
+        model.addAttribute("hobbyList", hobbyList);
+        model.addAttribute("user", userVO);
+        return "/user/updateForm";
+    }
+
+    @ResponseBody
+    @PostMapping("/update")
+    public Map<String, Object> update(@RequestBody UserVO userVO) {
+        int userUpdated = userService.userUpdate(userVO);
+        int hobbyUpdated = hobbyService.hobbyUpdate(userVO.getUser_id(),userVO.getHobby());
+        Map<String, Object> map = new HashMap<>();
+        if (userUpdated != 0 && hobbyUpdated != 0) {
+            map.put("status", 0);
+        } else {
+            map.put("status", -99);
+            map.put("statusMessage", "실패");
+        }
+
+        return map;
     }
 }

@@ -26,7 +26,6 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
 		loginMapper.setLoginTime(authentication.getName());
 		loginMapper.unLock(authentication.getName());
-		System.out.println(authentication.getName());
 		System.out.println("authentication ->" + authentication);
 
         setDefaultTargetUrl("/");
