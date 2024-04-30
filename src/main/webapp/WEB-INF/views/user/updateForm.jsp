@@ -8,6 +8,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+    <%@ include file="/WEB-INF/views/include/meta.jsp" %>
+    <%@ include file="/WEB-INF/views/include/css.jsp" %>
+    <%@ include file="/WEB-INF/views/include/js.jsp" %>
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/style.css'/>">
 </head>
 <body>

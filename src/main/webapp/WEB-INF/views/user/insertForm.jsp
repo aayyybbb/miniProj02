@@ -6,8 +6,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+    <%@ include file="/WEB-INF/views/include/meta.jsp" %>
+    <%@ include file="/WEB-INF/views/include/css.jsp" %>
+    <%@ include file="/WEB-INF/views/include/js.jsp" %>
 </head>
 <body>
+<%@ include file="/WEB-INF/views/include/header.jsp" %>
 회원가입 페이지
 
 <form id="rForm" method="post">
@@ -29,8 +33,8 @@
       <input type="submit" value="등록">
     </div>
 </form>
-<script type="text/javascript" src="<c:url value='/js/common.js'/>"></script>
 <script type="text/javascript">
+
     const rForm = document.getElementById("rForm");
     rForm.addEventListener("submit", e => {
     	//서버에 form data를 전송하지 않는다
@@ -49,5 +53,6 @@
 		});
     });
 </script>
+<%@ include file="/WEB-INF/views/include/footer.jsp" %>
 </body>
 </html>

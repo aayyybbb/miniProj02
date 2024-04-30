@@ -29,4 +29,10 @@
 		WHERE user_id = #{user_id}
 	</update>
 
+	<update id="updateLockedTime">
+		UPDATE user
+		SET locked_at = now()
+		WHERE user_id = #{user_id}
+	</update>
+
 </mapper>

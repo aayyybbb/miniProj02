@@ -12,4 +12,6 @@ public interface LoginMapper {
     void plusCount(String userId);
 
     void setLoginTime(String userId);
+
+    void updateLockedTime(String userId);
 }
