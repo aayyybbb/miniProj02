@@ -11,7 +11,6 @@
     <%@ include file="/WEB-INF/views/include/js.jsp" %>
 </head>
 <body>
-<%@ include file="/WEB-INF/views/include/header.jsp" %>
 회원가입 페이지
 
 <form id="rForm" method="post">

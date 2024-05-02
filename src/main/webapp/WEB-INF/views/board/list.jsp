@@ -58,7 +58,7 @@
         <c:forEach var="board" items="${boardList}">
         <tr>
             <td onclick="jsView('${board.board_id}')"  style="cursor:pointer;">${board.board_id}</td>
-            <td><a href="board.do?action=view&id=${board.board_id}">${board.title}</a></td>
+            <td><a  href="/board/read/${board.board_id}">${board.title}</a></td>
             <td>${board.writer}</td>
             <td>${board.created_at}</td>
         </tr>

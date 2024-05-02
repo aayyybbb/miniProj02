@@ -37,6 +37,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'javax.servlet:jstl:1.2'
    	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+    implementation 'org.jsoup:jsoup:1.15.3'
 }
 
 tasks.named('bootBuildImage') {

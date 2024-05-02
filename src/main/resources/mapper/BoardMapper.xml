@@ -16,6 +16,21 @@
         on b.user_id = u.user_id
     </select>
 
+    <insert id="boardInsert" parameterType="org.kosa.hello.miniproj02.entity.BoardVO" useGeneratedKeys="true" keyColumn="board_id" keyProperty="board_id">
+        insert into board
+        (user_id,title,content)
+        values
+        (#{writer}, #{title}, #{content})
+    </insert>
 
+    <select id="boardRead" resultType="org.kosa.hello.miniproj02.entity.BoardVO">
+        select
+            b.*, u.user_id
+        from
+            board b
+        join user u on b.user_id = u.user_id
+        where
+            board_id = #{board_id}
+    </select>
 
 </mapper>
