@@ -14,5 +14,6 @@ public interface BoardMapper {
 
     BoardVO boardRead(BoardVO boardVO);
 
+    BoardVO boardDetailRead(BoardVO boardVO);
 }
 

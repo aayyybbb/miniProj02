@@ -9,18 +9,27 @@
         file
         (board_id, file_save_name, file_origin_name, file_source)
         values
-        (#{board_id}, #{file_save_name}, #{file_origin_name}, #{file_source})
+        (
+        <choose>
+            <when test="board_id != null">
+                #{board_id}
+            </when>
+            <otherwise>
+                null
+            </otherwise>
+        </choose>,
+        #{file_save_name}, #{file_origin_name}, #{file_source})
     </insert>
 
     <insert id="saveCkFileInDB" parameterType="org.kosa.hello.miniproj02.entity.FileVO" useGeneratedKeys="true" keyProperty="file_id" keyColumn="file_id">
         insert into
         file
-        (file_save_name, file_origin_name, file_source)
+        (file_save_name, file_origin_name, file_source, file_type)
         values
-        (#{file_save_name}, #{file_origin_name}, #{file_source})
+        (#{file_save_name}, #{file_origin_name}, #{file_source}, #{file_type})
     </insert>
 
-    <select id="getCkImageFile" resultType="org.kosa.hello.miniproj02.entity.FileVO">
+    <select id="getFile" resultType="org.kosa.hello.miniproj02.entity.FileVO">
         select
             *
         from

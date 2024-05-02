@@ -16,5 +16,6 @@ public class FileVO {
     private String file_save_name;
     private String file_origin_name;
     private String file_source;
+    private String file_type;
     private MultipartFile upload;
 }

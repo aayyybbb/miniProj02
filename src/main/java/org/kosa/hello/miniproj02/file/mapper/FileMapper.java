@@ -9,5 +9,5 @@ public interface FileMapper {
 
     void saveCkFileInDB(FileVO file);
 
-    FileVO getCkImageFile(String file_id);
+    FileVO getFile(String file_id);
 }

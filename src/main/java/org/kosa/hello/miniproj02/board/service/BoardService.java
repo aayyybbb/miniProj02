@@ -13,7 +13,12 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -49,10 +54,11 @@ public class BoardService {
             String imgSrc = imgTag.attr("src");
             File file = new File(imgSrc);
             String fileId = file.getName();
-            FileVO fileVO = fileMapper.getCkImageFile(fileId);
+            FileVO fileVO = fileMapper.getFile(fileId);
 
             fileVO.setBoard_id(insertedBoardVO.getBoard_id());
-            fileMapper.saveFileInDB(fileVO);
+            fileVO.setFile_type("ck");
+            fileMapper.saveCkFileInDB(fileVO);
         }
 
        return boardInserted;
@@ -86,6 +92,10 @@ public class BoardService {
         return boardMapper.boardRead(boardVO);
     }
 
+    public BoardVO boardDetailRead(BoardVO boardVO) {
+            return boardMapper.boardDetailRead(boardVO);
+        }
+
     public String saveCkFileInLocal(MultipartFile file) {
         if (file == null || file.getName() == null) return null;
         Calendar now = Calendar.getInstance();
@@ -106,11 +116,41 @@ public class BoardService {
         fileVO.setFile_source(realFile.getAbsolutePath());
         fileVO.setFile_save_name(file_save_name);
         fileVO.setFile_origin_name(file.getOriginalFilename());
+        fileVO.setFile_type("ck");
         fileMapper.saveCkFileInDB(fileVO);
         return Integer.toString(fileVO.getFile_id());
 }
 
-    public FileVO getCkImageFile(String fileId) {
-        return fileMapper.getCkImageFile(fileId);
+    public FileVO getFile(String fileId) {
+        return fileMapper.getFile(fileId);
     }
+
+    public void uploadAndDownload(FileVO fileVO, HttpServletResponse response) throws IOException {
+        OutputStream out = response.getOutputStream();
+        if (fileVO == null) {
+      			response.setStatus(404);
+      		} else {
+
+      			String originName = fileVO.getFile_origin_name();
+      			originName = URLEncoder.encode(originName, "UTF-8");
+      			//다운로드 할 때 헤더 설정
+      			response.setHeader("Cache-Control", "no-cache");
+      			response.addHeader("Content-disposition", "attachment; fileName="+originName);
+
+      			//파일을 바이너리로 바꿔서 담아 놓고 responseOutputStream에 담아서 보낸다.
+      			FileInputStream input = new FileInputStream(fileVO.getFile_source());
+
+      			//outputStream에 8k씩 전달
+      	        byte[] buffer = new byte[1024*8];
+
+      	        while(true) {
+      	        	int count = input.read(buffer);
+      	        	if(count<0)break;
+      	        	out.write(buffer,0,count);
+      	        }
+      	        input.close();
+      	        out.close();
+      		}
+    }
+
 }

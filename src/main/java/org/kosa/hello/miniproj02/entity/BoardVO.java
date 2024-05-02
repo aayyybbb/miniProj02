@@ -19,8 +19,8 @@ public class BoardVO {
     private int viewCount;
     private String pwd;
     private String writer;
-
+    private String file_origin_name;
     private List<MultipartFile> file;
-
+    private int file_id;
     private String user_id;
 }

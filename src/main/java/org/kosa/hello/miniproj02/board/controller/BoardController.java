@@ -4,21 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.kosa.hello.miniproj02.board.service.BoardService;
 import org.kosa.hello.miniproj02.entity.BoardVO;
 import org.kosa.hello.miniproj02.entity.FileVO;
-import org.kosa.hello.miniproj02.entity.LoginDetails;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
-
-import java.io.FileInputStream;
-import java.io.OutputStream;
-import java.net.URLEncoder;
 import java.security.Principal;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,11 +25,10 @@ public class BoardController {
 
 
     @GetMapping("/list")
-    public String list(Model model, Authentication authentication) {
-        LoginDetails loginDetails = (LoginDetails) authentication.getPrincipal();
+    public String list(Model model, Principal principal) {
         List<BoardVO> boardList = boardService.getBoardList();
         model.addAttribute("boardList", boardList);
-        model.addAttribute("loginUser", loginDetails.getUserVO().getUser_id());
+        model.addAttribute("loginUser", principal.getName());
         return "board/list";
     }
 
@@ -66,7 +57,7 @@ public class BoardController {
     public String read(Model model, @PathVariable int board_id) {
         BoardVO boardVO = new BoardVO();
         boardVO.setBoard_id(board_id);
-        model.addAttribute("board", boardService.boardRead(boardVO));
+        model.addAttribute("board", boardService.boardDetailRead(boardVO));
         return "board/read";
     }
 
@@ -74,8 +65,8 @@ public class BoardController {
     @ResponseBody
     public Map<String, Object> ckUpload(FileVO fileVO) {
         MultipartFile file = fileVO.getUpload();
-        String uploadedId = boardService.saveCkFileInLocal(file);
-        String uploadPath = application.getContextPath() + "/board/ck/" + uploadedId;
+        String file_id = boardService.saveCkFileInLocal(file);
+        String uploadPath = application.getContextPath() + "/board/uploadAndDownload/" + file_id;
 
         Map<String, Object> result = new HashMap<>();
         result.put("uploaded", true);
@@ -83,39 +74,11 @@ public class BoardController {
         return result;
     }
 
-    @GetMapping("/ck/{uploadedId}")
-   	public void image(@PathVariable("uploadedId") String uploadedId, HttpServletResponse response) throws Exception{
-        OutputStream out = response.getOutputStream();
-        FileVO fileVO = boardService.getCkImageFile(uploadedId);
-
-   		if (fileVO == null) {
-   			response.setStatus(404);
-   		} else {
-
-   			String originName = fileVO.getFile_source();
-   			originName = URLEncoder.encode(originName, "UTF-8");
-   			//다운로드 할 때 헤더 설정
-   			response.setHeader("Cache-Control", "no-cache");
-   			response.addHeader("Content-disposition", "attachment; fileName="+originName);
-//   			response.setContentLength((int)boardImageFileVO.getSize());
-//   			response.setContentType(boardImageFileVO.getContent_type());
-
-   			//파일을 바이너리로 바꿔서 담아 놓고 responseOutputStream에 담아서 보낸다.
-   			FileInputStream input = new FileInputStream(fileVO.getFile_source());
-
-   			//outputStream에 8k씩 전달
-   	        byte[] buffer = new byte[1024*8];
-
-   	        while(true) {
-   	        	int count = input.read(buffer);
-   	        	if(count<0)break;
-   	        	out.write(buffer,0,count);
-   	        }
-   	        input.close();
-   	        out.close();
-   		}
-   	}
-
+    @GetMapping("/uploadAndDownload/{file_id}")
+    public void downLoadFile(@PathVariable("file_id") String fileId, HttpServletResponse response) throws Exception {
+      		FileVO fileVO = boardService.getFile(fileId);
+            boardService.uploadAndDownload(fileVO,response);
+    }
 
 }
 

@@ -27,6 +27,8 @@
       <label>제목 : ${board.title}</label><br/>
       <label>내용 : ${board.content}</label><br/>
       <label>작성자 : ${board.writer}</label><br/>
+      <label for="file_id">첨부파일 : ${board.file_origin_name}</label><br/>
+      <input type="hidden" id="file_id" value="${board.file_id}">
       <label>작성일 : ${board.created_at}</label><br/>
       <label>조회수 : ${board.viewCount}</label><br/>
 
@@ -56,6 +58,15 @@ function jsUpdateForm() {
 		viewForm.submit();
 	}
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const fileLink = document.querySelector('label[for="file_id"]');
+    const fileId = document.getElementById('file_id').value;
+
+    fileLink.addEventListener('click', function() {
+        window.location.href = "/board/uploadAndDownload/" + fileId;
+    });
+});
 </script>
 <!-- 두개의 폼을 하나로 합치는 방법 , js를 사용하여 처리  -->
 	<form id="viewForm" method="post" action="board.do">

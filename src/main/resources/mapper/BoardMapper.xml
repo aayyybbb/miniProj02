@@ -25,12 +25,24 @@
 
     <select id="boardRead" resultType="org.kosa.hello.miniproj02.entity.BoardVO">
         select
-            b.*, u.user_id
+            *
+        from
+            board
+        where
+            board_id = #{board_id}
+    </select>
+
+    <select id="boardDetailRead" resultType="org.kosa.hello.miniproj02.entity.BoardVO">
+        select
+            b.*, u.user_id as writer, f.file_id, f.file_origin_name
         from
             board b
         join user u on b.user_id = u.user_id
+        join file f on f.board_id = b.board_id
         where
-            board_id = #{board_id}
+            b.board_id = #{board_id}
+        and
+            f.file_type = "attached"
     </select>
 
 </mapper>
