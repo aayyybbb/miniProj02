@@ -42,7 +42,6 @@ public class Scheduler {
             long delay = Duration.between(now, requestTime.plusMinutes(20)).toMillis();
             Runnable run = () -> {
                    loginMapper.unLock(userId);
-                   System.out.println("Task executed 20 minutes after request!");
                };
             scheduledExecutor.scheduledExecutorService().schedule(run, 5, TimeUnit.SECONDS);
         }}

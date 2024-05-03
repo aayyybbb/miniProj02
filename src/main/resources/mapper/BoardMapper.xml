@@ -45,4 +45,16 @@
             f.file_type = "attached"
     </select>
 
+    <update id="boardUpdate" parameterType="org.kosa.hello.miniproj02.entity.BoardVO">
+        <![CDATA[
+            update
+                board
+            set
+                title = #{title},
+                content = #{content}
+            where
+                board_id = #{board_id}
+        ]]>
+    </update>
+
 </mapper>

@@ -34,30 +34,6 @@
 
 <script type="text/javascript" src="<c:url value='/js/common.js'/>"></script>
 <script>
-function jsDelete() {
-	if (confirm("정말로 삭제하시겠습니까?")) {
-		action.value = "delete";
-		ybFetch("board.do", "viewForm", json => {
-			if(json.status == 0) {
-				//성공
-				alert("게시물 정보를 삭제 하였습니다");
-				location = "board.do?action=list";
-			} else {
-				alert(json.statusMessage);
-			}
-		});
-	}
-}
-
-function jsUpdateForm() {
-	if (confirm("정말로 수정하시겠습니까?")) {
-		//서버의 URL을 설정한다
-		action.value = "updateForm";
-
-		//서버의 URL로 전송한다
-		viewForm.submit();
-	}
-}
 
 document.addEventListener('DOMContentLoaded', function() {
     const fileLink = document.querySelector('label[for="file_id"]');
@@ -68,18 +44,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-<!-- 두개의 폼을 하나로 합치는 방법 , js를 사용하여 처리  -->
-	<form id="viewForm" method="post" action="board.do">
-		<input type="hidden" id="action" name="action" value="">
-		<input type="hidden" name="id" value="${board.board_id}">
-		<input type="button" value="삭제" onclick="jsDelete()">
-		<input type="button" value="수정" onclick="jsUpdateForm()">
-	</form>
-
     <div>
-        <a href="board.do?action=list">목록</a>
-        <a href="board.do?action=updateForm&id=${board.board_id}">수정</a>
-        <a href="board.do?action=delete&id=${board.board_id}">삭제</a>
+        <a href="${pageContext.request.contextPath}/board/list">목록</a>
+        <a href="/board/updateForm/${board.board_id}">수정</a>
+        <a href="/board/delete/${board.board_id}">삭제</a>
     </div>
 </body>
 </html>

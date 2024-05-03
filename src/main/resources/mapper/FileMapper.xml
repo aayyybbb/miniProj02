@@ -38,5 +38,23 @@
             file_id = #{file_id}
     </select>
 
+    <select id="deleteFileSource" resultType="org.kosa.hello.miniproj02.entity.FileVO">
+        select
+            f.file_source, f.file_id
+        from
+            file f
+        join board b on f.board_id = b.board_id
+        where
+            b.board_id = ${board_id}
+    </select>
+
+    <delete id="deleteFileInDB">
+        delete
+        from
+            file
+        where
+            file_id = ${file_id}
+    </delete>
+
 
 </mapper>

@@ -11,6 +11,7 @@ import org.kosa.hello.miniproj02.entity.FileVO;
 import org.kosa.hello.miniproj02.file.mapper.FileMapper;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -88,10 +89,6 @@ public class BoardService {
         return fileVO;
 }
 
-    public BoardVO boardRead(BoardVO boardVO) {
-        return boardMapper.boardRead(boardVO);
-    }
-
     public BoardVO boardDetailRead(BoardVO boardVO) {
             return boardMapper.boardDetailRead(boardVO);
         }
@@ -153,4 +150,56 @@ public class BoardService {
       		}
     }
 
+    public void deleteFile(FileVO fileVO) {
+        File file = new File(fileVO.getFile_source());
+        if (file.exists() && file.isFile()) {
+            // 파일 삭제 시도
+            if (file.delete()) {
+                System.out.println("파일이 성공적으로 삭제되었습니다.");
+            } else {
+                System.out.println("파일 삭제에 실패했습니다.");
+            }
+        } else {
+            System.out.println("파일이 존재하지 않거나 삭제할 수 없습니다.");
+        }
+        fileMapper.deleteFileInDB(fileVO);
+    }
+
+    public int update(BoardVO boardVO) {
+        if(boardVO.getFile() == null){
+           return boardMapper.boardUpdate(boardVO);
+        }else{
+            int boardUpdated = boardMapper.boardUpdate(boardVO);
+            BoardVO updatedBoardVO = boardMapper.boardRead(boardVO);
+
+            List<FileVO> fileVOList = fileMapper.deleteFileSource(boardVO.getBoard_id());
+            for(FileVO fileVO : fileVOList){
+                deleteFile(fileVO);
+            }
+
+            for(MultipartFile file : boardVO.getFile()){
+               FileVO fileVO = saveFileInLocal(file, updatedBoardVO.getBoard_id());
+                if (fileVO != null) {
+                    fileVO.setBoard_id(updatedBoardVO.getBoard_id());
+                    fileMapper.saveFileInDB(fileVO);
+                }
+            }
+
+            Document findImg = Jsoup.parse(boardVO.getContent());
+            Element imgTag = findImg.select("img").first();
+
+            if (imgTag != null) {
+                String imgSrc = imgTag.attr("src");
+                File file = new File(imgSrc);
+                String fileId = file.getName();
+                FileVO fileVO = fileMapper.getFile(fileId);
+
+                fileVO.setBoard_id(updatedBoardVO.getBoard_id());
+                fileVO.setFile_type("ck");
+                fileMapper.saveCkFileInDB(fileVO);
+            }
+
+            return boardUpdated;
+        }
+    }
 }

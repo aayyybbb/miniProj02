@@ -61,6 +61,21 @@ public class BoardController {
         return "board/read";
     }
 
+    @ResponseBody
+    @PostMapping("/update")
+    public Map<String, Object> update(BoardVO boardVO) {
+        System.err.println(boardVO.toString());
+        Map<String, Object> result = new HashMap<>();
+        int boardUpdated = boardService.update(boardVO);
+        if(boardUpdated != 0){
+            result.put("status",0);
+        }else{
+            result.put("status", -99);
+            result.put("statusMessage", "실패");
+        }
+        return result;
+    }
+
     @PostMapping("/ckUpload")
     @ResponseBody
     public Map<String, Object> ckUpload(FileVO fileVO) {
@@ -78,6 +93,15 @@ public class BoardController {
     public void downLoadFile(@PathVariable("file_id") String fileId, HttpServletResponse response) throws Exception {
       		FileVO fileVO = boardService.getFile(fileId);
             boardService.uploadAndDownload(fileVO,response);
+    }
+
+    @GetMapping("/updateForm/{board_id}")
+    public String updateForm(Model model, Principal principal, @PathVariable int board_id) {
+        BoardVO boardVO = new BoardVO();
+        boardVO.setBoard_id(board_id);
+        model.addAttribute("board", boardService.boardDetailRead(boardVO));
+        model.addAttribute("loginUser", principal.getName());
+        return "board/updateForm";
     }
 
 }
