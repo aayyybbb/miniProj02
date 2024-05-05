@@ -1,7 +1,7 @@
 package org.kosa.hello.miniproj02.board.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -11,7 +11,6 @@ import org.kosa.hello.miniproj02.entity.FileVO;
 import org.kosa.hello.miniproj02.file.mapper.FileMapper;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -201,5 +200,9 @@ public class BoardService {
 
             return boardUpdated;
         }
+    }
+
+    public int delete(BoardVO boardVO) {
+        return boardMapper.deleteBoard(boardVO);
     }
 }

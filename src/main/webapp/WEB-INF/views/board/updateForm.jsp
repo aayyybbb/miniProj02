@@ -30,13 +30,13 @@
     <form id="rForm" method="post" enctype="multipart/form-data">
         <input type="hidden" name="board_id" value="${board.board_id}">
         <label>제목 : </label><input type="text" id="title" name="title" value="${board.title}" required="required"><br/>
-        <textarea id="content" name="content" value="${board.content}"></textarea>
+        <textarea id="content" name="content" required="required">${board.content}</textarea>
         <div id="div_file">
             <input  type='file' id="file" name='file' />
         </div>
             <div>
                 <input type="submit" value="수정">
-                <a href="javascript:history(-1)">취소</a>
+                <button onclick="history.go(-1)">취소</button>
             </div>
         <input type="hidden" id="writer" name="writer" value="${loginUser}"><br/>
     </form>
@@ -44,7 +44,6 @@
 <script type="text/javascript" src="<c:url value='/js/common.js'/>"></script>
 
 <script type="text/javascript">
-    let history;
     const csrfParameter = document.querySelector("meta[name='_csrf_parameter']").content;
     const csrfToken = document.querySelector("meta[name='_csrf']").content;
     const board_image_url = "<c:url value='/board/ckUpload?'/>" + csrfParameter + "=" + csrfToken;

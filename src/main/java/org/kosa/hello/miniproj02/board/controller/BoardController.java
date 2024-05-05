@@ -104,5 +104,21 @@ public class BoardController {
         return "board/updateForm";
     }
 
+    @PostMapping("/delete")
+    @ResponseBody
+    public Map<String, Object> delete(@RequestBody BoardVO boardVO) {
+        System.err.println(boardVO.toString());
+        Map<String, Object> result = new HashMap<>();
+        int boardDeleted = boardService.delete(boardVO);
+        if(boardDeleted != 0){
+            result.put("status",0);
+        }else{
+            result.put("status", -99);
+            result.put("statusMessage", "실패");
+        }
+        return result;
+    }
+
+
 }
 
