@@ -29,9 +29,9 @@
     <c:when test="${principal.authorities eq '[ROLE_ADMIN]'}">
         <input type="hidden" id="user_id" name="user_id" value="${user.user_id}">
         <label>권한 선택:</label><br>
-            <input type="checkbox" id="admin" name="roles" value="ADMIN" ${user.role eq 'ADMIN' ? 'checked' : ''}>
+            <input type="checkbox" id="admin" name="roles" value="ADMIN" ${user.role.contains('ADMIN') ? 'checked' : ''}>
             <label for="admin">관리자</label><br>
-            <input type="checkbox" id="user" name="roles" value="USER" ${user.role eq 'USER' ? 'checked' : ''}>
+            <input type="checkbox" id="user" name="roles" value="USER" ${user.role.contains('USER') ? 'checked' : ''}>
             <label for="user">사용자</label><br>
         <label>계정 잠금 상태:</label>
         <input type="radio" id="locked" name="locked_at" ${not empty user.locked_at ? 'checked' : ''}> <label for="locked">잠금</label>

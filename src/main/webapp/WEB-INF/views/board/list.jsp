@@ -69,6 +69,7 @@
         <th>게시물번호</th>
         <th>제목</th>
         <th>작성자</th>
+        <th>조회수</th>
         <th>작성일</th>
     </tr>
     <c:forEach var="board" items="${pageResponseVO.list}">
@@ -76,6 +77,7 @@
             <td >${board.board_id}</td>
             <td><a href="/board/read/${board.board_id}">${board.title}</a></td>
             <td>${board.user_id}</td>
+            <td>${board.viewCount}</td>
             <td>${board.created_at}</td>
         </tr>
     </c:forEach>
@@ -94,7 +96,7 @@
                 <a class="page-link" data-num="${num}">${num}</a></li>
         </c:forEach>
 
-        <c:if test="${pageResponseVO.pageNo != pageResponseVO.end}">
+        <c:if test="${pageResponseVO.pageNo != pageResponseVO.end && pageResponseVO.pageNo != 1}">
             <li class="page-item">
                 <a class="page-link" data-num="${pageResponseVO.pageNo + 1}">다음</a>
             </li>

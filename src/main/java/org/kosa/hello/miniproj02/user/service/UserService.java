@@ -41,4 +41,8 @@ public class UserService {
         userVO.setPwd(newPwd);
         return userMapper.userUpdate(userVO);
     }
+
+    public void userDelete(String userId) {
+        userMapper.userDelete(new UserVO(userId));
+    }
 }

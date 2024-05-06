@@ -41,4 +41,11 @@
         where user_id = #{user_id}
     </update>
 
+    <delete id="userDelete"  parameterType="org.kosa.hello.miniproj02.entity.UserVO">
+        delete
+        from user
+        where
+            user_id = '${user_id}'
+    </delete>
+
 </mapper>

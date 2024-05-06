@@ -33,4 +33,12 @@ public class LoginService implements UserDetailsService {
         }
         return resultVO;
     }
+
+    public void updateLockedTime(String user_id){
+        loginMapper.updateLockedTime(user_id);
+    }
+
+    public void unLock(String userId) {
+        loginMapper.unLock(userId);
+    }
 }
