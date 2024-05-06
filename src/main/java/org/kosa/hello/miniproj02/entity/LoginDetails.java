@@ -48,11 +48,13 @@ public class LoginDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        if(userVO.getLogin_count() == 3){
+        if (userVO.getLocked_at() != null) {
+            return false;
+        } else if (userVO.getLogin_count() == 3) {
             scheduler.unLockUser(LocalDateTime.now(), userVO.getUser_id());
             System.err.println("잠금해제 스케줄 등록 :" + userVO.getUser_id());
             return false;
-        }else{
+        } else {
             return true;
         }
 

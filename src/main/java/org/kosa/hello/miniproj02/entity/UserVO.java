@@ -22,6 +22,7 @@ public class UserVO {
     private String addr;
     private String role;
     private int login_count;
+    private List<String> roles;
 
     private List<String> hobby;
     private String searchKey;

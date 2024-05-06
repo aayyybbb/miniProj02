@@ -8,7 +8,6 @@
 <title>Insert title here</title>
     <%@ include file="/WEB-INF/views/include/meta.jsp" %>
     <%@ include file="/WEB-INF/views/include/css.jsp" %>
-    <%@ include file="/WEB-INF/views/include/js.jsp" %>
 </head>
 <body>
 <h1>
@@ -25,23 +24,45 @@
 <c:forEach var="hobby" items="${hobbyList}">
     <label for="${hobby.hobby_name}">${hobby.hobby_name}</label><br/>
 </c:forEach>
-
-<a href="/user/updateForm">수정</a><br/>
-<a href="/">취소</a>
+<form id="rForm">
+<c:choose>
+    <c:when test="${principal.authorities eq '[ROLE_ADMIN]'}">
+        <input type="hidden" id="user_id" name="user_id" value="${user.user_id}">
+        <label>권한 선택:</label><br>
+            <input type="checkbox" id="admin" name="roles" value="ADMIN" ${user.role eq 'ADMIN' ? 'checked' : ''}>
+            <label for="admin">관리자</label><br>
+            <input type="checkbox" id="user" name="roles" value="USER" ${user.role eq 'USER' ? 'checked' : ''}>
+            <label for="user">사용자</label><br>
+        <label>계정 잠금 상태:</label>
+        <input type="radio" id="locked" name="locked_at" ${not empty user.locked_at ? 'checked' : ''}> <label for="locked">잠금</label>
+        <input type="radio" id="unlocked" name="locked_at" ${empty user.locked_at ? 'checked' : ''}> <label for="unlocked">해제</label><br>
+        <div>
+              <input type="submit" value="수정">
+              <button onclick="history.go(-1)">취소</button >
+            </div>
+    </c:when>
+    <c:otherwise>
+        <a href="/user/updateForm">수정</a><br/>
+        <button onclick="history.go(-1)">취소</button>
+    </c:otherwise>
+</c:choose>
+</form>
 
 <script type="text/javascript" src="<c:url value='/js/common.js'/>"></script>
 <script type="text/javascript">
+    document.getElementById('locked').value= new Date().toISOString().slice(0, -1);
+    document.getElementById('unlocked').value= null;
+
     const rForm = document.getElementById("rForm");
     rForm.addEventListener("submit", e => {
     	//서버에 form data를 전송하지 않는다
     	e.preventDefault();
-
-		ybFetch("/user/insert", "rForm", json => {
+		ybFetch("/admin/updateUser", "rForm", json => {
 			switch(json.status) {
 			case 0:
 				//성공
-				alert("회원가입을 완료 하였습니다");
-				location="/";
+				alert("회원정보를 수정 하였습니다");
+				location="/admin/list";
 				break;
 			default:
 				alert(json.statusMessage);

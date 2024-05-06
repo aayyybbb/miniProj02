@@ -4,41 +4,41 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.kosa.hello.miniproj02.user.mapper.UserMapper">
 
-	<insert id="userInsert" parameterType="org.kosa.hello.miniproj02.entity.UserVO">
-		insert into user
-		(user_id, pwd, name, birth, gender, phone, addr, role)
-		values
-		(#{user_id}, #{pwd}, #{name}, #{birth}, #{gender}, #{phone}, #{addr}, #{role})
-	</insert>
+    <insert id="userInsert" parameterType="org.kosa.hello.miniproj02.entity.UserVO">
+        insert into user
+            (user_id, pwd, name, birth, gender, phone, addr, role)
+        values (#{user_id}, #{pwd}, #{name}, #{birth}, #{gender}, #{phone}, #{addr}, #{role})
+    </insert>
 
-	<select id="userVOList" resultType="org.kosa.hello.miniproj02.entity.UserVO">
-		select
-		    *
-		from
-		    user
-	</select>
+    <select id="userVOList" resultType="org.kosa.hello.miniproj02.entity.UserVO">
+        select *
+        from user
+    </select>
 
-	<select id="userInfo" resultType="org.kosa.hello.miniproj02.entity.UserVO">
-		select
-		    *
-		from
-		    user
-		where
-		    user_id = #{user_id}
-	</select>
+    <select id="userInfo" resultType="org.kosa.hello.miniproj02.entity.UserVO">
+        select *
+        from user
+        where user_id = #{user_id}
+    </select>
 
-	<update id="userUpdate" parameterType="org.kosa.hello.miniproj02.entity.UserVO">
-		update
-		user
-		set
-		    pwd = #{pwd},
-		    name = #{name},
-		    addr = #{addr},
-		    birth = #{birth},
-		    phone = #{phone},
-		    gender = #{gender}
-		where
-		    user_id = #{user_id}
-	</update>
+    <update id="userUpdate" parameterType="org.kosa.hello.miniproj02.entity.UserVO">
+        update
+            user
+        set pwd    = #{pwd},
+            name   = #{name},
+            addr   = #{addr},
+            birth  = #{birth},
+            phone  = #{phone},
+            gender = #{gender}
+        where user_id = #{user_id}
+    </update>
+
+    <update id="updateUserRoleAndLockedInfo" parameterType="org.kosa.hello.miniproj02.entity.UserVO">
+        update
+            user
+        set role    = #{role},
+            locked_at = #{locked_at}
+        where user_id = #{user_id}
+    </update>
 
 </mapper>

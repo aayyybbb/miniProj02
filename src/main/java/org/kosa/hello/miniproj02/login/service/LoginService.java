@@ -28,7 +28,7 @@ public class LoginService implements UserDetailsService {
         LoginDetails resultVO = new LoginDetails(scheduler,userVO);
         if (userVO == null) {
             throw new UsernameNotFoundException(userId + " 사용자가 존재하지 않습니다");
-        }else if(userVO.getLogin_count() == 3){
+        }else if(userVO.getLogin_count() == 3 && userVO.getLocked_at() == null){
             loginMapper.updateLockedTime(userId);
         }
         return resultVO;

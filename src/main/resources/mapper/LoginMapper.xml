@@ -13,7 +13,8 @@
 
 	<update id="unLock">
 		UPDATE user
-		SET login_count = 0
+		SET login_count = 0,
+		    locked_at = null
 		WHERE user_id = #{user_id}
 	</update>
 

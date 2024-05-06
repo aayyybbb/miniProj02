@@ -16,5 +16,5 @@ public interface UserMapper {
 
     UserVO userInfo(UserVO userVO);
 
-
+    int updateUserRoleAndLockedInfo(UserVO userVO);
 }

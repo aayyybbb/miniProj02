@@ -48,19 +48,23 @@
     	<input type="hidden" id="bno" name="bno" >
     </form>
 
-    <table border="1">
+    <table>
         <tr>
             <th>아이디</th>
             <th>이름</th>
             <th>연락처</th>
+            <th>권한</th>
             <th>성별</th>
+            <th>잠금 상태</th>
         </tr>
         <c:forEach var="user" items="${userList}">
         <tr>
-            <td>${user.user_id}</td>
-            <td><a href="/read${user.user_id}">${user.name}</a></td>
+            <td><input type="checkbox" name="selectedUser" value="${user.user_id}">${user.user_id}</td>
+            <td><a href="/admin/read/${user.user_id}">${user.name}</a></td>
             <td>${user.phone}</td>
+            <td>${user.role}</td>
             <td>${user.gender}</td>
+            <td>${empty user.locked_at ? 'F' : 'T'}</td>
         </tr>
         </c:forEach>
     </table>
