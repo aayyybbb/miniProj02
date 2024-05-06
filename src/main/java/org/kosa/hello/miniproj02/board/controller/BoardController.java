@@ -16,6 +16,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -35,10 +36,11 @@ public class BoardController {
         if (bindingResult.hasErrors()) {
             pageRequestVO = PageRequestVO.builder().build();
         }
-
+        LocalDateTime now = LocalDateTime.now();
         model.addAttribute("pageResponseVO", boardService.getBoardList(pageRequestVO));
         model.addAttribute("loginUser", principal.getName());
         model.addAttribute("sizes", pageService.getList());
+        model.addAttribute("now", now);
         return "board/list";
     }
 

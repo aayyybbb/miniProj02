@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="java.time.LocalDateTime, java.time.format.DateTimeFormatter" %>
+
 
 <!DOCTYPE html>
 <html>
@@ -41,6 +43,7 @@
             font-size: 16px;
             background-color: #f5f5f5;
         }
+
         .float-end {
             float: none !important; /* float 해제 */
             display: flex;
@@ -76,8 +79,13 @@
     </tr>
     <c:forEach var="board" items="${pageResponseVO.list}">
         <tr>
-            <td >${board.board_id}</td>
-            <td><a href="/board/read/${board.board_id}">${board.title}</a></td>
+            <td>${board.board_id}</td>
+            <td><a href="/board/read/${board.board_id}">
+                <c:if test="${board.created_at.plusHours(24) > now }">
+                    <img src="/images/new.png" width="50px" alt="new"/>
+                </c:if>
+                    ${board.title}
+            </a></td>
             <td>${board.user_id}</td>
             <td>${board.viewCount}</td>
             <td>${board.created_at}</td>
