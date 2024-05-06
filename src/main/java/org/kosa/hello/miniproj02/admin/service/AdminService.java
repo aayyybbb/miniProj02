@@ -1,4 +1,4 @@
-package org.kosa.hello.miniproj02.admin.controller;
+package org.kosa.hello.miniproj02.admin.service;
 
 import lombok.RequiredArgsConstructor;
 import org.kosa.hello.miniproj02.entity.UserVO;

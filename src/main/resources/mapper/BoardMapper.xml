@@ -4,67 +4,81 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.kosa.hello.miniproj02.board.mapper.BoardMapper">
 
+    <sql id="search">
+        <where>
+            <if test="searchKey != null and searchKey != ''">
+                <choose>
+                    <when test="searchBy == 'title'">
+                        AND title LIKE CONCAT('%', #{searchKey}, '%')
+                    </when>
+                    <when test="searchBy == 'content'">
+                        AND content LIKE CONCAT('%', #{searchKey}, '%')
+                    </when>
+                    <when test="searchBy == 'user_id'">
+                        AND user_id LIKE CONCAT('%', #{searchKey}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </sql>
+
     <select id="getBoardList" resultType="org.kosa.hello.miniproj02.entity.BoardVO">
         select
-            b.board_id,
-            b.title,
-            u.user_id as writer,
-            b.created_at
+        *
         from
-            board b
-        join user u
-        on b.user_id = u.user_id
+        board
+        <include refid="search"/>
+        order by created_at desc limit #{skip}, #{size}
     </select>
 
-    <insert id="boardInsert" parameterType="org.kosa.hello.miniproj02.entity.BoardVO" useGeneratedKeys="true" keyColumn="board_id" keyProperty="board_id">
+    <select id="getTotalCount" resultType="int">
+        select
+        count(*)
+        from board
+        <include refid="search"/>
+    </select>
+
+    <insert id="boardInsert" parameterType="org.kosa.hello.miniproj02.entity.BoardVO" useGeneratedKeys="true"
+            keyColumn="board_id" keyProperty="board_id">
         insert into board
-        (user_id,title,content)
-        values
-        (#{writer}, #{title}, #{content})
+            (user_id, title, content)
+        values (#{writer}, #{title}, #{content})
     </insert>
 
     <select id="boardRead" resultType="org.kosa.hello.miniproj02.entity.BoardVO">
-        select
-            *
-        from
-            board
-        where
-            board_id = #{board_id}
+        select *
+        from board
+        where board_id = #{board_id}
     </select>
 
     <select id="boardDetailRead" resultType="org.kosa.hello.miniproj02.entity.BoardVO">
         <![CDATA[
-        select
-            b.*, u.user_id as writer, f.file_id, f.file_origin_name
-        from
-            board b
-        join user u on b.user_id = u.user_id
-        join file f on f.board_id = b.board_id
-        where
-            b.board_id = #{board_id}
-        and
-            f.file_type = "attached"
+        select b.*,
+               u.user_id as writer,
+               f.file_id,
+               f.file_origin_name
+        from board b
+                 join user u on b.user_id = u.user_id
+                 join file f on f.board_id = b.board_id
+        where b.board_id = #{board_id}
+          and f.file_type = "attached"
         ]]>
     </select>
 
     <update id="boardUpdate" parameterType="org.kosa.hello.miniproj02.entity.BoardVO">
         <![CDATA[
-            update
-                board
-            set
-                title = #{title},
-                content = #{content}
-            where
-                board_id = #{board_id}
+        update
+            board
+        set title   = #{title},
+            content = #{content}
+        where board_id = #{board_id}
         ]]>
     </update>
 
     <delete id="deleteBoard" parameterType="org.kosa.hello.miniproj02.entity.BoardVO">
         delete
-        from
-            board
-        where
-            board_id = #{board_id}
+        from board
+        where board_id = #{board_id}
     </delete>
 
 </mapper>

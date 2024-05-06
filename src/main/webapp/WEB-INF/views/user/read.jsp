@@ -47,7 +47,28 @@
     </c:otherwise>
 </c:choose>
 </form>
+<!--  페이지 네비게이션 바 출력  -->
+   <div class="float-end">
+       <ul class="pagination flex-wrap">
+           <c:if test="${pageResponseVO.prev}">
+               <li class="page-item">
+                   <a class="page-link" data-num="${pageResponseVO.start -1}">이전</a>
+               </li>
+           </c:if>
 
+           <c:forEach begin="${pageResponseVO.start}" end="${pageResponseVO.end}" var="num">
+               <li class="page-item ${pageResponseVO.pageNo == num ? 'active':''} ">
+                   <a class="page-link"  data-num="${num}">${num}</a></li>
+           </c:forEach>
+
+           <c:if test="${pageResponseVO.next}">
+               <li class="page-item">
+                   <a class="page-link"  data-num="${pageResponseVO.end + 1}">다음</a>
+               </li>
+           </c:if>
+       </ul>
+
+   </div>
 <script type="text/javascript" src="<c:url value='/js/common.js'/>"></script>
 <script type="text/javascript">
     document.getElementById('locked').value= new Date().toISOString().slice(0, -1);

@@ -8,6 +8,8 @@ import org.jsoup.nodes.Element;
 import org.kosa.hello.miniproj02.board.mapper.BoardMapper;
 import org.kosa.hello.miniproj02.entity.BoardVO;
 import org.kosa.hello.miniproj02.entity.FileVO;
+import org.kosa.hello.miniproj02.entity.PageRequestVO;
+import org.kosa.hello.miniproj02.entity.PageResponseVO;
 import org.kosa.hello.miniproj02.file.mapper.FileMapper;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -32,25 +34,31 @@ public class BoardService {
     private final String CURR_IMAGE_REPO_PATH = "c:\\upload";
     private final SimpleDateFormat date_format = new SimpleDateFormat(File.separator + "YYYY" + File.separator + "MM" + File.separator + "dd");
 
-    public List<BoardVO> getBoardList() { return boardMapper.getBoardList();
+    public PageResponseVO<BoardVO> getBoardList(PageRequestVO pageRequestVO) {
+
+        List<BoardVO> list = boardMapper.getBoardList(pageRequestVO);
+        int total = boardMapper.getTotalCount(pageRequestVO);
+
+        return PageResponseVO.<BoardVO>withAll().list(list).total(total)
+        				.size(pageRequestVO.getSize()).pageNo(pageRequestVO.getPageNo()).build();
     }
 
     public int insert(BoardVO boardVO) {
-       int boardInserted = boardMapper.boardInsert(boardVO);
-       BoardVO insertedBoardVO = boardMapper.boardRead(boardVO);
+        int boardInserted = boardMapper.boardInsert(boardVO);
+        BoardVO insertedBoardVO = boardMapper.boardRead(boardVO);
 
-       for(MultipartFile file : boardVO.getFile()){
-           FileVO fileVO = saveFileInLocal(file,insertedBoardVO.getBoard_id());
-           if(fileVO != null){
+        for (MultipartFile file : boardVO.getFile()) {
+            FileVO fileVO = saveFileInLocal(file, insertedBoardVO.getBoard_id());
+            if (fileVO != null) {
                 fileVO.setBoard_id(insertedBoardVO.getBoard_id());
                 fileMapper.saveFileInDB(fileVO);
-           }
-       }
+            }
+        }
 
         Document findImg = Jsoup.parse(boardVO.getContent());
         Element imgTag = findImg.select("img").first();
 
-        if(imgTag != null) {
+        if (imgTag != null) {
             String imgSrc = imgTag.attr("src");
             File file = new File(imgSrc);
             String fileId = file.getName();
@@ -61,7 +69,7 @@ public class BoardService {
             fileMapper.saveCkFileInDB(fileVO);
         }
 
-       return boardInserted;
+        return boardInserted;
     }
 
     private FileVO saveFileInLocal(MultipartFile file, @Nullable int board_id) {
@@ -71,7 +79,7 @@ public class BoardService {
         File realPath = new File(CURR_IMAGE_REPO_PATH + realFolder);
         String file_save_name = UUID.randomUUID().toString();
         File realFile = new File(realPath, file_save_name);
-        if(!realPath.exists()) {
+        if (!realPath.exists()) {
             realPath.mkdirs();
         }
         try {
@@ -86,11 +94,15 @@ public class BoardService {
         fileVO.setFile_origin_name(file.getOriginalFilename());
         fileVO.setBoard_id(board_id);
         return fileVO;
-}
+    }
+
+    public BoardVO boardRead(BoardVO boardVO) {
+        return boardMapper.boardRead(boardVO);
+    }
 
     public BoardVO boardDetailRead(BoardVO boardVO) {
-            return boardMapper.boardDetailRead(boardVO);
-        }
+        return boardMapper.boardDetailRead(boardVO);
+    }
 
     public String saveCkFileInLocal(MultipartFile file) {
         if (file == null || file.getName() == null) return null;
@@ -99,7 +111,7 @@ public class BoardService {
         File realPath = new File(CURR_IMAGE_REPO_PATH + realFolder);
         String file_save_name = UUID.randomUUID().toString();
         File realFile = new File(realPath, file_save_name);
-        if(!realPath.exists()) {
+        if (!realPath.exists()) {
             realPath.mkdirs();
         }
         try {
@@ -115,7 +127,7 @@ public class BoardService {
         fileVO.setFile_type("ck");
         fileMapper.saveCkFileInDB(fileVO);
         return Integer.toString(fileVO.getFile_id());
-}
+    }
 
     public FileVO getFile(String fileId) {
         return fileMapper.getFile(fileId);
@@ -124,29 +136,29 @@ public class BoardService {
     public void uploadAndDownload(FileVO fileVO, HttpServletResponse response) throws IOException {
         OutputStream out = response.getOutputStream();
         if (fileVO == null) {
-      			response.setStatus(404);
-      		} else {
+            response.setStatus(404);
+        } else {
 
-      			String originName = fileVO.getFile_origin_name();
-      			originName = URLEncoder.encode(originName, "UTF-8");
-      			//다운로드 할 때 헤더 설정
-      			response.setHeader("Cache-Control", "no-cache");
-      			response.addHeader("Content-disposition", "attachment; fileName="+originName);
+            String originName = fileVO.getFile_origin_name();
+            originName = URLEncoder.encode(originName, "UTF-8");
+            //다운로드 할 때 헤더 설정
+            response.setHeader("Cache-Control", "no-cache");
+            response.addHeader("Content-disposition", "attachment; fileName=" + originName);
 
-      			//파일을 바이너리로 바꿔서 담아 놓고 responseOutputStream에 담아서 보낸다.
-      			FileInputStream input = new FileInputStream(fileVO.getFile_source());
+            //파일을 바이너리로 바꿔서 담아 놓고 responseOutputStream에 담아서 보낸다.
+            FileInputStream input = new FileInputStream(fileVO.getFile_source());
 
-      			//outputStream에 8k씩 전달
-      	        byte[] buffer = new byte[1024*8];
+            //outputStream에 8k씩 전달
+            byte[] buffer = new byte[1024 * 8];
 
-      	        while(true) {
-      	        	int count = input.read(buffer);
-      	        	if(count<0)break;
-      	        	out.write(buffer,0,count);
-      	        }
-      	        input.close();
-      	        out.close();
-      		}
+            while (true) {
+                int count = input.read(buffer);
+                if (count < 0) break;
+                out.write(buffer, 0, count);
+            }
+            input.close();
+            out.close();
+        }
     }
 
     public void deleteFile(FileVO fileVO) {
@@ -165,19 +177,19 @@ public class BoardService {
     }
 
     public int update(BoardVO boardVO) {
-        if(boardVO.getFile() == null){
-           return boardMapper.boardUpdate(boardVO);
-        }else{
+        if (boardVO.getFile() == null) {
+            return boardMapper.boardUpdate(boardVO);
+        } else {
             int boardUpdated = boardMapper.boardUpdate(boardVO);
             BoardVO updatedBoardVO = boardMapper.boardRead(boardVO);
 
             List<FileVO> fileVOList = fileMapper.deleteFileSource(boardVO.getBoard_id());
-            for(FileVO fileVO : fileVOList){
+            for (FileVO fileVO : fileVOList) {
                 deleteFile(fileVO);
             }
 
-            for(MultipartFile file : boardVO.getFile()){
-               FileVO fileVO = saveFileInLocal(file, updatedBoardVO.getBoard_id());
+            for (MultipartFile file : boardVO.getFile()) {
+                FileVO fileVO = saveFileInLocal(file, updatedBoardVO.getBoard_id());
                 if (fileVO != null) {
                     fileVO.setBoard_id(updatedBoardVO.getBoard_id());
                     fileMapper.saveFileInDB(fileVO);

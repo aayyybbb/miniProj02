@@ -21,8 +21,14 @@ tr:hover {
     padding: 10px 20px;
     font-size: 16px; 
     background-color: #f5f5f5;
+    margin-top: 20px;
 }
 p {
   /* 수평 중앙 정렬하기 */
   text-align: center;
+}
+.button-container button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #f5f5f5;
 }

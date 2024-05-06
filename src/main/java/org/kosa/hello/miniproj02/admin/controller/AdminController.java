@@ -1,6 +1,7 @@
 package org.kosa.hello.miniproj02.admin.controller;
 
 import lombok.AllArgsConstructor;
+import org.kosa.hello.miniproj02.admin.service.AdminService;
 import org.kosa.hello.miniproj02.entity.HobbyVO;
 import org.kosa.hello.miniproj02.entity.UserVO;
 import org.kosa.hello.miniproj02.hobby.service.HobbyService;

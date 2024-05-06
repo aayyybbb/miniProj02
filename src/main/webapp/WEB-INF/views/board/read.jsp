@@ -30,7 +30,7 @@
 <label>게시물 번호: ${board.board_id}</label> <br/>
 <label>제목 : ${board.title}</label><br/>
 <label>내용 : ${board.content}</label><br/>
-<label>작성자 : ${board.writer}</label><br/>
+<label>작성자 : ${board.user_id}</label><br/>
 <label for="file_id">첨부파일 : ${board.file_origin_name}</label><br/>
 <input type="hidden" id="file_id" value="${board.file_id}">
 <label>작성일 : ${board.created_at}</label><br/>

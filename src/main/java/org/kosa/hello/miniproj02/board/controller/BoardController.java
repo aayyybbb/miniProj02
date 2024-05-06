@@ -4,15 +4,19 @@ import lombok.RequiredArgsConstructor;
 import org.kosa.hello.miniproj02.board.service.BoardService;
 import org.kosa.hello.miniproj02.entity.BoardVO;
 import org.kosa.hello.miniproj02.entity.FileVO;
+import org.kosa.hello.miniproj02.entity.PageRequestVO;
+import org.kosa.hello.miniproj02.page.service.PageService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -22,13 +26,18 @@ import java.util.Map;
 public class BoardController {
     private final BoardService boardService;
     private final ServletContext application;
+    private final PageService pageService;
 
 
     @GetMapping("/list")
-    public String list(Model model, Principal principal) {
-        List<BoardVO> boardList = boardService.getBoardList();
-        model.addAttribute("boardList", boardList);
+    public String list(@Valid PageRequestVO pageRequestVO, BindingResult bindingResult, Model model, Principal principal) {
+        if (bindingResult.hasErrors()) {
+            pageRequestVO = PageRequestVO.builder().build();
+        }
+
+        model.addAttribute("pageResponseVO", boardService.getBoardList(pageRequestVO));
         model.addAttribute("loginUser", principal.getName());
+        model.addAttribute("sizes", pageService.getList());
         return "board/list";
     }
 
@@ -44,9 +53,9 @@ public class BoardController {
         Map<String, Object> result = new HashMap<>();
         int updated = boardService.insert(boardVO);
 
-        if(updated != 0){
-            result.put("status",0);
-        }else {
+        if (updated != 0) {
+            result.put("status", 0);
+        } else {
             result.put("status", -99);
             result.put("statusMessage", "실패");
         }
@@ -57,7 +66,12 @@ public class BoardController {
     public String read(Model model, @PathVariable int board_id) {
         BoardVO boardVO = new BoardVO();
         boardVO.setBoard_id(board_id);
-        model.addAttribute("board", boardService.boardDetailRead(boardVO));
+        BoardVO boardDetail = boardService.boardDetailRead(boardVO);
+        if (boardDetail == null) {
+            model.addAttribute("board", boardService.boardRead(boardVO));
+        } else {
+            model.addAttribute("board", boardDetail);
+        }
         return "board/read";
     }
 
@@ -67,9 +81,9 @@ public class BoardController {
         System.err.println(boardVO.toString());
         Map<String, Object> result = new HashMap<>();
         int boardUpdated = boardService.update(boardVO);
-        if(boardUpdated != 0){
-            result.put("status",0);
-        }else{
+        if (boardUpdated != 0) {
+            result.put("status", 0);
+        } else {
             result.put("status", -99);
             result.put("statusMessage", "실패");
         }
@@ -85,14 +99,14 @@ public class BoardController {
 
         Map<String, Object> result = new HashMap<>();
         result.put("uploaded", true);
-        result.put("url",uploadPath);
+        result.put("url", uploadPath);
         return result;
     }
 
     @GetMapping("/uploadAndDownload/{file_id}")
     public void downLoadFile(@PathVariable("file_id") String fileId, HttpServletResponse response) throws Exception {
-      		FileVO fileVO = boardService.getFile(fileId);
-            boardService.uploadAndDownload(fileVO,response);
+        FileVO fileVO = boardService.getFile(fileId);
+        boardService.uploadAndDownload(fileVO, response);
     }
 
     @GetMapping("/updateForm/{board_id}")
@@ -110,9 +124,9 @@ public class BoardController {
         System.err.println(boardVO.toString());
         Map<String, Object> result = new HashMap<>();
         int boardDeleted = boardService.delete(boardVO);
-        if(boardDeleted != 0){
-            result.put("status",0);
-        }else{
+        if (boardDeleted != 0) {
+            result.put("status", 0);
+        } else {
             result.put("status", -99);
             result.put("statusMessage", "실패");
         }

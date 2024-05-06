@@ -2,13 +2,13 @@ package org.kosa.hello.miniproj02.board.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.kosa.hello.miniproj02.entity.BoardVO;
-import org.kosa.hello.miniproj02.entity.FileVO;
+import org.kosa.hello.miniproj02.entity.PageRequestVO;
 
 import java.util.List;
 
 @Mapper
 public interface BoardMapper {
-    List<BoardVO> getBoardList();
+    List<BoardVO> getBoardList(PageRequestVO pageRequestVO);
 
     int boardInsert(BoardVO boardVO);
 
@@ -19,5 +19,7 @@ public interface BoardMapper {
     int boardUpdate(BoardVO boardVO);
 
     int deleteBoard(BoardVO boardVO);
+
+    int getTotalCount(PageRequestVO pageRequestVO);
 }
 
