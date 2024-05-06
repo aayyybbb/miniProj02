@@ -10,6 +10,7 @@
     <%@ include file="/WEB-INF/views/include/meta.jsp" %>
     <%@ include file="/WEB-INF/views/include/css.jsp" %>
     <%@ include file="/WEB-INF/views/include/js.jsp" %>
+    <%@ include file="/WEB-INF/views/include/header.jsp" %>
     <style>
         table {
             width: 100%;
@@ -39,14 +40,28 @@
             font-size: 16px;
             background-color: #f5f5f5;
         }
+
+        .float-end {
+            float: none !important; /* float 해제 */
+            display: flex;
+            justify-content: center; /* 가로 중앙 정렬 */
+        }
     </style>
 </head>
 <body>
 <h1>회원 목록</h1>
 
-<form id="searchForm" action="member.do" method="post">
-    <input type="hidden" id="action" name="action" value="list">
-    <label>제목</label>
+<form id="searchForm" action="list">
+    <select id="size" name="size">
+        <c:forEach var="size" items="${sizes}">
+            <option value="${size.page_id}" ${pageResponseVO.size == size.page_id ? 'selected' : ''} >${size.page_num}</option>
+        </c:forEach>
+    </select>
+    <select id="searchBy" name="searchBy">
+        <option value="user_id">아이디</option>
+        <option value="name">이름</option>
+        <option value="role">권한</option>
+    </select>
     <input type="text" id="searchKey" name="searchKey" value="${param.searchKey}">
     <input type="submit" value="검색">
 </form>
@@ -62,7 +77,7 @@
             <th>성별</th>
             <th>잠금 상태</th>
         </tr>
-        <c:forEach var="user" items="${userList}">
+        <c:forEach var="user" items="${pageResponseVO.list}">
             <tr>
                 <td><input type="checkbox" id="usersId" name="usersId" value="${user.user_id}"></td>
                 <td>${user.user_id}</td>
@@ -79,7 +94,51 @@
     <input type="submit" name="submitAction" value="계정 삭제">
 
 </form>
+<div class="float-end">
+    <ul class="pagination flex-wrap">
+        <c:if test="${pageResponseVO.prev}">
+            <li class="page-item">
+                <a class="page-link" data-num="${pageResponseVO.pageNo -1}">이전</a>
+            </li>
+        </c:if>
+
+        <c:forEach begin="${pageResponseVO.start}" end="${pageResponseVO.end}" var="num">
+            <li class="page-item ${pageResponseVO.pageNo == num ? 'active':''} ">
+                <a class="page-link" data-num="${num}">${num}</a></li>
+        </c:forEach>
+
+        <c:if test="${pageResponseVO.pageNo != pageResponseVO.end && pageResponseVO.pageNo != 1}">
+            <li class="page-item">
+                <a class="page-link" data-num="${pageResponseVO.pageNo + 1}">다음</a>
+            </li>
+        </c:if>
+    </ul>
+</div>
 <script>
+    const searchForm = document.getElementById("searchForm");
+
+    document.querySelector(".pagination").addEventListener("click", function (e) {
+        e.preventDefault()
+
+        const target = e.target
+
+        if (target.tagName !== 'A') {
+            return
+        }
+        //dataset 프로퍼티로 접근 또는 속성 접근 메서드 getAttribute() 사용 하여 접근 가능
+        //const num = target.getAttribute("data-num")
+        const num = target.dataset["num"];
+
+        //페이지번호 설정
+        searchForm.innerHTML += `<input type='hidden' name='pageNo' value='\${num}'>`;
+        searchForm.submit();
+    });
+
+
+    document.querySelector("#size").addEventListener("change", e => {
+        searchForm.submit();
+    });
+
     rForm.addEventListener("submit", e => {
         e.preventDefault();
 

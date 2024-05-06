@@ -2,6 +2,7 @@ package org.kosa.hello.miniproj02.user.mapper;
 
 
 import org.apache.ibatis.annotations.Mapper;
+import org.kosa.hello.miniproj02.entity.PageRequestVO;
 import org.kosa.hello.miniproj02.entity.UserVO;
 
 import java.util.List;
@@ -19,4 +20,8 @@ public interface UserMapper {
     int updateUserRoleAndLockedInfo(UserVO userVO);
 
     void userDelete(UserVO userVO);
+    
+    List<UserVO> getUserList(PageRequestVO pageRequestVO);
+
+    int getTotalCount(PageRequestVO pageRequestVO);
 }

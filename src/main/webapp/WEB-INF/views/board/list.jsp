@@ -10,6 +10,8 @@
     <title>게시물 목록</title>
     <%@ include file="/WEB-INF/views/include/meta.jsp" %>
     <%@ include file="/WEB-INF/views/include/css.jsp" %>
+    <%@ include file="/WEB-INF/views/include/header.jsp" %>
+
     <style>
         table {
             width: 100%;

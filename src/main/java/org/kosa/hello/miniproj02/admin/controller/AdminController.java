@@ -3,17 +3,19 @@ package org.kosa.hello.miniproj02.admin.controller;
 import lombok.AllArgsConstructor;
 import org.kosa.hello.miniproj02.admin.service.AdminService;
 import org.kosa.hello.miniproj02.entity.HobbyVO;
+import org.kosa.hello.miniproj02.entity.PageRequestVO;
 import org.kosa.hello.miniproj02.entity.UserVO;
 import org.kosa.hello.miniproj02.hobby.service.HobbyService;
-import org.kosa.hello.miniproj02.login.mapper.LoginMapper;
 import org.kosa.hello.miniproj02.login.service.LoginService;
 import org.kosa.hello.miniproj02.admin.dto.UserAdminDTO;
-import org.kosa.hello.miniproj02.user.mapper.UserMapper;
+import org.kosa.hello.miniproj02.page.service.PageService;
 import org.kosa.hello.miniproj02.user.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -26,14 +28,18 @@ public class AdminController {
     private final UserService userService;
     private final HobbyService hobbyService;
     private final AdminService adminService;
-    private final UserMapper userMapper;
-    private final LoginMapper loginMapper;
     private final LoginService loginService;
+    private final PageService pageService;
+
 
     @GetMapping("/list")
-    public String list(Model model) {
-        List<UserVO> userList = userService.getUserList();
-        model.addAttribute("userList", userList);
+    public String list(@Valid PageRequestVO pageRequestVO, BindingResult bindingResult, Model model, Principal principal) {
+        if (bindingResult.hasErrors()) {
+            pageRequestVO = PageRequestVO.builder().build();
+        }
+        model.addAttribute("pageResponseVO", userService.getUserList(pageRequestVO));
+        model.addAttribute("loginUser", principal.getName());
+        model.addAttribute("sizes", pageService.getList());
         return "/admin/list";
     }
 

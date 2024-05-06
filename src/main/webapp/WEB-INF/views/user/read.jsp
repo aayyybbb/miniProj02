@@ -8,6 +8,7 @@
 <title>Insert title here</title>
     <%@ include file="/WEB-INF/views/include/meta.jsp" %>
     <%@ include file="/WEB-INF/views/include/css.jsp" %>
+    <%@ include file="/WEB-INF/views/include/header.jsp" %>
 </head>
 <body>
 <h1>
