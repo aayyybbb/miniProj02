@@ -66,14 +66,18 @@ public class BoardController {
     }
 
     @GetMapping("/read/{board_id}")
-    public String read(Model model, @PathVariable int board_id) {
+    public String read(Model model, @PathVariable int board_id, Principal principal) {
         BoardVO boardVO = new BoardVO();
         boardVO.setBoard_id(board_id);
         BoardVO boardDetail = boardService.boardDetailRead(boardVO);
         if (boardDetail == null) {
-            model.addAttribute("board", boardService.boardRead(boardVO));
+            boardService.viewCountUp(board_id, principal);
+            BoardVO boardRead = boardService.boardRead(boardVO);
+            model.addAttribute("board", boardRead);
         } else {
-            model.addAttribute("board", boardDetail);
+            boardService.viewCountUp(board_id, principal);
+            BoardVO boardDetails = boardService.boardDetailRead(boardVO);
+            model.addAttribute("board", boardDetails);
         }
         return "board/read";
     }

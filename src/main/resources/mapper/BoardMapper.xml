@@ -89,4 +89,11 @@
         where
             board_id = #{board_id}
     </select>
+
+    <update id="viewCountUp" parameterType="org.kosa.hello.miniproj02.entity.BoardVO">
+        update
+            board
+        set viewcount = viewcount + 1
+        where board_id = #{board_id}
+    </update>
 </mapper>

@@ -23,5 +23,7 @@ public interface BoardMapper {
     int getTotalCount(PageRequestVO pageRequestVO);
 
     String confirmPwd(BoardVO boardVO);
+
+    void viewCountUp(BoardVO boardVO);
 }
 

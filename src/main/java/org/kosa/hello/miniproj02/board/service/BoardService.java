@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -102,6 +103,15 @@ public class BoardService {
 
     public BoardVO boardDetailRead(BoardVO boardVO) {
         return boardMapper.boardDetailRead(boardVO);
+    }
+
+    public void viewCountUp (int board_id, Principal principal) {
+        BoardVO boardVO = new BoardVO();
+        boardVO.setBoard_id(board_id);
+        boardVO = boardMapper.boardRead(boardVO);
+        if(!boardVO.getUser_id().equals(principal.getName())) {
+            boardMapper.viewCountUp(boardVO);
+        }
     }
 
     public String saveCkFileInLocal(MultipartFile file) {
