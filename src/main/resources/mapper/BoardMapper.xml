@@ -41,8 +41,8 @@
     <insert id="boardInsert" parameterType="org.kosa.hello.miniproj02.entity.BoardVO" useGeneratedKeys="true"
             keyColumn="board_id" keyProperty="board_id">
         insert into board
-            (user_id, title, content)
-        values (#{writer}, #{title}, #{content})
+            (user_id, title, content, pwd)
+        values (#{writer}, #{title}, #{content}, #{pwd})
     </insert>
 
     <select id="boardRead" resultType="org.kosa.hello.miniproj02.entity.BoardVO">
@@ -81,4 +81,12 @@
         where board_id = #{board_id}
     </delete>
 
+    <select id="confirmPwd" resultType="string">
+        select
+            pwd
+        from
+            board
+        where
+            board_id = #{board_id}
+    </select>
 </mapper>

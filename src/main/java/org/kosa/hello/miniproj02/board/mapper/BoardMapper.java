@@ -21,5 +21,7 @@ public interface BoardMapper {
     int deleteBoard(BoardVO boardVO);
 
     int getTotalCount(PageRequestVO pageRequestVO);
+
+    String confirmPwd(BoardVO boardVO);
 }
 

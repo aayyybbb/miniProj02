@@ -34,6 +34,7 @@
                 <input  type='file' name='file' />
             </div>
             <br/>
+        <label>비밀번호 : </label><input type="password" id="pwd" name="pwd"><br/>
             <div>
                 <input type="submit" value="등록">
                 <a href="javascript:history(-1)">취소</a>

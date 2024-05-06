@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 @Controller
@@ -80,6 +81,14 @@ public class BoardController {
     public Map<String, Object> update(BoardVO boardVO) {
         System.err.println(boardVO.toString());
         Map<String, Object> result = new HashMap<>();
+        if (boardVO.getPwd() != null && !boardVO.getPwd().isEmpty()) {
+            if (!Objects.equals(boardVO.getPwd(), boardService.confirmPwd(boardVO))) {
+                result.put("status", -90);
+                result.put("statusMessage", "비밀번호가 틀립니다.");
+                return result;
+            }
+        }
+
         int boardUpdated = boardService.update(boardVO);
         if (boardUpdated != 0) {
             result.put("status", 0);
@@ -123,6 +132,13 @@ public class BoardController {
     public Map<String, Object> delete(@RequestBody BoardVO boardVO) {
         System.err.println(boardVO.toString());
         Map<String, Object> result = new HashMap<>();
+        if (boardVO.getPwd() != null && !boardVO.getPwd().isEmpty()) {
+            if (!Objects.equals(boardVO.getPwd(), boardService.confirmPwd(boardVO))) {
+                result.put("status", -90);
+                result.put("statusMessage", "비밀번호가 틀립니다.");
+                return result;
+            }
+        }
         int boardDeleted = boardService.delete(boardVO);
         if (boardDeleted != 0) {
             result.put("status", 0);

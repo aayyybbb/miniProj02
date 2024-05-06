@@ -16,26 +16,8 @@
     <sec:csrfInput/>
     아이디 : <input type="text" name="user_id"/><br/>
     비밀번호 : <input type="password" name="pwd"/><br/>
-    <a href="#" id="forgotPasswordLink">비밀번호를 잊으셨나요?</a>
     <input type="submit" value="로그인">
 </form>
-<!-- 모달을 표시할 HTML 코드 -->
-<div class="modal-backdrop" id="forgotPasswordModal" style="display: none;">
-    <div class="modal">
-        <div class="modal-content">
-            <!-- 모달 내용 -->
-            <h2>비밀번호 찾기</h2>
-            <form action="/forgotPassword" method="post">
-                <%-- CSRF 토큰 설정 --%>
-                <sec:csrfInput/>
-                아이디 : <input type="text" name="user_id"/><br/>
-                <!-- 이메일 입력란 등 추가 필요한 정보 입력 -->
-                <input type="submit" value="비밀번호 재설정 이메일 보내기">
-            </form>
-            <span class="modal-close" onclick="closeModal()">닫기</span>
-        </div>
-    </div>
-</div>
 
 <script>
     msg = "${error ? exception : ''}";

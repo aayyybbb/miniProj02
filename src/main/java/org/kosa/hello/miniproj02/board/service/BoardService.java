@@ -217,4 +217,8 @@ public class BoardService {
     public int delete(BoardVO boardVO) {
         return boardMapper.deleteBoard(boardVO);
     }
+
+    public String confirmPwd(BoardVO boardVO) {
+        return boardMapper.confirmPwd(boardVO);
+    }
 }
