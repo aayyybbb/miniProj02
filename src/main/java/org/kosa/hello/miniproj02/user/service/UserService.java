@@ -41,8 +41,8 @@ public class UserService {
         return userMapper.userUpdate(userVO);
     }
 
-    public void userDelete(String userId) {
-        userMapper.userDelete(new UserVO(userId));
+    public int userDelete(String userId) {
+        return userMapper.userDelete(new UserVO(userId));
     }
 
     public PageResponseVO<UserVO> getUserList(PageRequestVO pageRequestVO) {

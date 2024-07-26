@@ -22,7 +22,7 @@
         </where>
     </sql>
 
-    <select id="getBoardList" resultType="org.kosa.hello.miniproj02.entity.BoardVO">
+    <select id="getBoardList" resultType="BoardVO">
         select
         *
         from

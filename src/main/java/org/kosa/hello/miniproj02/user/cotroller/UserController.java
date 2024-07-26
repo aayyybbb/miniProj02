@@ -6,6 +6,7 @@ import org.kosa.hello.miniproj02.entity.UserVO;
 import org.kosa.hello.miniproj02.hobby.service.HobbyService;
 import org.kosa.hello.miniproj02.user.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -85,4 +86,19 @@ public class UserController {
 
         return map;
     }
+
+    @ResponseBody
+    @PostMapping("/delete")
+    public Map<String, Object> delete(@RequestBody UserVO userVO) {
+        Map<String, Object> map = new HashMap<>();
+       int userDeleted = userService.userDelete(userVO.getUser_id());
+       if(userDeleted != 1){
+           map.put("status", 1);
+       }else{
+           map.put("status", -99);
+           map.put("statusMessage", "탈퇴 실패");
+       }
+       return map;
+    }
+
 }

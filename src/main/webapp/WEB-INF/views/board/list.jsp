@@ -2,7 +2,6 @@
          pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="java.time.LocalDateTime, java.time.format.DateTimeFormatter" %>
 
 
 <!DOCTYPE html>
@@ -13,6 +12,8 @@
     <%@ include file="/WEB-INF/views/include/meta.jsp" %>
     <%@ include file="/WEB-INF/views/include/css.jsp" %>
     <%@ include file="/WEB-INF/views/include/header.jsp" %>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
 
     <style>
         table {
@@ -52,8 +53,10 @@
     </style>
 </head>
 <body>
-<h1>게시물목록</h1>
-<h3>로그인 : ${loginUser} </h3>
+<h1>Board List</h1>
+<c:if test="${not empty loginUser}">
+<h5>login user : ${loginUser} </h5>
+</c:if>
 <form id="searchForm" action="list">
     <select id="size" name="size">
         <c:forEach var="size" items="${sizes}">
@@ -61,27 +64,27 @@
         </c:forEach>
     </select>
     <select id="searchBy" name="searchBy">
-        <option value="title">제목</option>
-        <option value="user_id">작성자</option>
-        <option value="content">내용</option>
+        <option value="title">title</option>
+        <option value="user_id">writer</option>
+        <option value="content">content</option>
     </select>
     <input type="text" id="searchKey" name="searchKey" value="${param.searchKey}">
-    <input type="submit" value="검색">
+    <input type="submit" value="search">
 </form>
 
 <table>
     <tr>
-        <th>게시물번호</th>
-        <th>제목</th>
-        <th>작성자</th>
-        <th>조회수</th>
-        <th>작성일</th>
+        <th>no</th>
+        <th>title</th>
+        <th>writer</th>
+        <th>views</th>
+        <th>date</th>
     </tr>
     <c:forEach var="board" items="${pageResponseVO.list}">
         <tr>
             <td>${board.board_id}</td>
             <td><a href="/board/read/${board.board_id}">
-                <c:if test="${board.created_at.plusHours(24) > now }">
+                <c:if test="${board.created_at.plusHours(12) > now }">
                     <img src="/images/new.png" width="50px" alt="new"/>
                 </c:if>
                     ${board.title}
@@ -97,7 +100,7 @@
     <ul class="pagination flex-wrap">
         <c:if test="${pageResponseVO.prev}">
             <li class="page-item">
-                <a class="page-link" data-num="${pageResponseVO.pageNo -1}">이전</a>
+                <a class="page-link" data-num="${pageResponseVO.pageNo -1}">&laquo;</a>
             </li>
         </c:if>
 
@@ -108,13 +111,13 @@
 
         <c:if test="${pageResponseVO.pageNo != pageResponseVO.end && pageResponseVO.pageNo != 1}">
             <li class="page-item">
-                <a class="page-link" data-num="${pageResponseVO.pageNo + 1}">다음</a>
+                <a class="page-link" data-num="${pageResponseVO.pageNo + 1}">&raquo;</a>
             </li>
         </c:if>
     </ul>
 </div>
 <div class="button-container">
-    <a href="${pageContext.request.contextPath}/board/insertForm">등록</a>
+    <a href="${pageContext.request.contextPath}/board/insertForm">write</a>
 </div>
 <script>
     const searchForm = document.getElementById("searchForm");

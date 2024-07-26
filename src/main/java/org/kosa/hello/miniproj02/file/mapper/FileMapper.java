@@ -16,4 +16,6 @@ public interface FileMapper {
     List<FileVO> deleteFileSource(int board_id);
 
     void deleteFileInDB(FileVO fileVO);
+
+    void saveCkFileBoardId(FileVO fileVO);
 }

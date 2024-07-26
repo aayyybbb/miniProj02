@@ -19,7 +19,7 @@ public interface UserMapper {
 
     int updateUserRoleAndLockedInfo(UserVO userVO);
 
-    void userDelete(UserVO userVO);
+    int userDelete(UserVO userVO);
     
     List<UserVO> getUserList(PageRequestVO pageRequestVO);
 

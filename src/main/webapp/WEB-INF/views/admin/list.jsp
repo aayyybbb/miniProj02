@@ -11,6 +11,8 @@
     <%@ include file="/WEB-INF/views/include/css.jsp" %>
     <%@ include file="/WEB-INF/views/include/js.jsp" %>
     <%@ include file="/WEB-INF/views/include/header.jsp" %>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
     <style>
         table {
             width: 100%;
@@ -49,7 +51,7 @@
     </style>
 </head>
 <body>
-<h1>회원 목록</h1>
+<h1>User List</h1>
 
 <form id="searchForm" action="list">
     <select id="size" name="size">
@@ -58,9 +60,9 @@
         </c:forEach>
     </select>
     <select id="searchBy" name="searchBy">
-        <option value="user_id">아이디</option>
-        <option value="name">이름</option>
-        <option value="role">권한</option>
+        <option value="user_id">id</option>
+        <option value="name">name</option>
+        <option value="role">role</option>
     </select>
     <input type="text" id="searchKey" name="searchKey" value="${param.searchKey}">
     <input type="submit" value="검색">
@@ -69,13 +71,13 @@
 <form id="rForm">
     <table>
         <tr>
-            <th>구분</th>
-            <th>아이디</th>
-            <th>이름</th>
-            <th>연락처</th>
-            <th>권한</th>
-            <th>성별</th>
-            <th>잠금 상태</th>
+            <th>check</th>
+            <th>id</th>
+            <th>name</th>
+            <th>phone</th>
+            <th>role</th>
+            <th>gender</th>
+            <th>lock</th>
         </tr>
         <c:forEach var="user" items="${pageResponseVO.list}">
             <tr>
@@ -85,20 +87,20 @@
                 <td>${user.phone}</td>
                 <td>${user.role}</td>
                 <td>${user.gender}</td>
-                <td>${empty user.locked_at ? 'F' : 'T'}</td>
+                <td>${empty user.locked_at ? 'unlocked' : 'locked'}</td>
             </tr>
         </c:forEach>
     </table>
-    <input type="submit" name="submitAction" value="계정 잠금">
-    <input type="submit" name="submitAction" value="잠금 해제">
-    <input type="submit" name="submitAction" value="계정 삭제">
+    <input type="submit" name="submitAction" value="lock">
+    <input type="submit" name="submitAction" value="unlock">
+    <input type="submit" name="submitAction" value="delete">
 
 </form>
 <div class="float-end">
     <ul class="pagination flex-wrap">
         <c:if test="${pageResponseVO.prev}">
             <li class="page-item">
-                <a class="page-link" data-num="${pageResponseVO.pageNo -1}">이전</a>
+                <a class="page-link" data-num="${pageResponseVO.pageNo -1}">prev</a>
             </li>
         </c:if>
 
@@ -109,7 +111,7 @@
 
         <c:if test="${pageResponseVO.pageNo != pageResponseVO.end && pageResponseVO.pageNo != 1}">
             <li class="page-item">
-                <a class="page-link" data-num="${pageResponseVO.pageNo + 1}">다음</a>
+                <a class="page-link" data-num="${pageResponseVO.pageNo + 1}">next</a>
             </li>
         </c:if>
     </ul>
@@ -145,13 +147,13 @@
         const submitAction = e.submitter.value;
 
         switch (submitAction) {
-            case "계정 잠금":
+            case "lock":
                 rForm.action = "/admin/lockUsers";
                 break;
-            case "잠금 해제":
+            case "unlock":
                 rForm.action = "/admin/unLockUsers";
                 break;
-            case "계정 삭제":
+            case "delete":
                 rForm.action = "/admin/deleteUsers";
                 break;
             default:

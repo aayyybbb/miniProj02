@@ -46,8 +46,9 @@ public class BoardService {
 
     public int insert(BoardVO boardVO) {
         int boardInserted = boardMapper.boardInsert(boardVO);
+        System.err.println(boardVO.getBoard_id());
         BoardVO insertedBoardVO = boardMapper.boardRead(boardVO);
-
+        if(boardVO.getFile() !=null){
         for (MultipartFile file : boardVO.getFile()) {
             FileVO fileVO = saveFileInLocal(file, insertedBoardVO.getBoard_id());
             if (fileVO != null) {
@@ -67,8 +68,8 @@ public class BoardService {
 
             fileVO.setBoard_id(insertedBoardVO.getBoard_id());
             fileVO.setFile_type("ck");
-            fileMapper.saveCkFileInDB(fileVO);
-        }
+            fileMapper.saveCkFileBoardId(fileVO);
+        }}
 
         return boardInserted;
     }

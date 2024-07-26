@@ -9,9 +9,11 @@
     <%@ include file="/WEB-INF/views/include/meta.jsp" %>
     <%@ include file="/WEB-INF/views/include/css.jsp" %>
     <%@ include file="/WEB-INF/views/include/js.jsp" %>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
 </head>
 <body>
-회원가입 페이지
+<h2>sign up</h2>
 
 <form id="rForm" method="post">
     <label>아이디:</label> <input type="text" id="user_id" name="user_id" required="required"><br>
@@ -52,6 +54,5 @@
 		});
     });
 </script>
-<%@ include file="/WEB-INF/views/include/footer.jsp" %>
 </body>
 </html>

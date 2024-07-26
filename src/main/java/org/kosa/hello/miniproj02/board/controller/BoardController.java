@@ -6,6 +6,7 @@ import org.kosa.hello.miniproj02.entity.BoardVO;
 import org.kosa.hello.miniproj02.entity.FileVO;
 import org.kosa.hello.miniproj02.entity.PageRequestVO;
 import org.kosa.hello.miniproj02.page.service.PageService;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,13 +33,15 @@ public class BoardController {
 
 
     @GetMapping("/list")
-    public String list(@Valid PageRequestVO pageRequestVO, BindingResult bindingResult, Model model, Principal principal) {
+    public String list(@Valid PageRequestVO pageRequestVO, BindingResult bindingResult, Model model, @Nullable Principal principal) {
         if (bindingResult.hasErrors()) {
             pageRequestVO = PageRequestVO.builder().build();
         }
         LocalDateTime now = LocalDateTime.now();
         model.addAttribute("pageResponseVO", boardService.getBoardList(pageRequestVO));
-        model.addAttribute("loginUser", principal.getName());
+        if (principal != null) {
+            model.addAttribute("loginUser", principal.getName());
+        }
         model.addAttribute("sizes", pageService.getList());
         model.addAttribute("now", now);
         return "board/list";
@@ -128,8 +131,16 @@ public class BoardController {
     public String updateForm(Model model, Principal principal, @PathVariable int board_id) {
         BoardVO boardVO = new BoardVO();
         boardVO.setBoard_id(board_id);
-        model.addAttribute("board", boardService.boardDetailRead(boardVO));
-        model.addAttribute("loginUser", principal.getName());
+        BoardVO boardDetail = boardService.boardDetailRead(boardVO);
+        if (boardDetail == null) {
+            boardService.viewCountUp(board_id, principal);
+            BoardVO boardRead = boardService.boardRead(boardVO);
+            model.addAttribute("board", boardRead);
+        } else {
+            boardService.viewCountUp(board_id, principal);
+            BoardVO boardDetails = boardService.boardDetailRead(boardVO);
+            model.addAttribute("board", boardDetails);
+        }
         return "board/updateForm";
     }
 

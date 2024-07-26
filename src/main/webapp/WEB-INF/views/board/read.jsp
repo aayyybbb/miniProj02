@@ -8,9 +8,12 @@
 <head>
     <meta charset="UTF-8">
     <title>게시물 상세보기</title>
+    <%@ include file="/WEB-INF/views/include/header.jsp" %>
     <%@ include file="/WEB-INF/views/include/meta.jsp" %>
     <%@ include file="/WEB-INF/views/include/css.jsp" %>
     <%@ include file="/WEB-INF/views/include/js.jsp" %>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
     <style>
         label {
             display: inline-block;

@@ -29,6 +29,15 @@
         (#{file_save_name}, #{file_origin_name}, #{file_source}, #{file_type})
     </insert>
 
+    <insert id="saveCkFileBoardId" parameterType="org.kosa.hello.miniproj02.entity.FileVO" useGeneratedKeys="true" keyProperty="file_id" keyColumn="file_id">
+            update
+                file
+            set
+                board_id = #{board_id}
+            where
+                file_id = #{file_id}
+        </insert>
+
     <select id="getFile" resultType="org.kosa.hello.miniproj02.entity.FileVO">
         select
             *

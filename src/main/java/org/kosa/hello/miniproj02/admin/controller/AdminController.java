@@ -62,7 +62,6 @@ public class AdminController {
         for (String role : userVO.getRoles()) {
             sb.append(role).append(",");
         }
-        // 마지막 쉼표 제거
         sb.deleteCharAt(sb.length() - 1);
         userVO.setRole(sb.toString());
         System.err.println(userVO);
